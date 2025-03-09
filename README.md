@@ -7,18 +7,21 @@ This is a project repo specially created for visualizing and comparing different
 - Introduction of different datasets
 - All related reference links (papers and websites)
 
-## Datasets <details><summary>Click to expand</summary>
+<details>
+<summary>Datasets</summary>
 
 ### Underwater Datasets
 
-#### URPC (Underwater Robot Profession Contest)
-- **Size**: [数据集大小，例如: 3,000 images]
-- **Content**: [图像内容描述，例如: RGB images of marine objects, seafloor, etc.]
-- **Purpose**: Object detection and classification in underwater environments
-- **Source**: [URPC Competition](http://www.cnurpc.org/)
+#### FLSea Stereo Dataset
+- **Size**: Comprises 4 distinct stereo subsets with each subset containing thousands of image pairs, totaling over 7337(3803+2362+867+305) synchronized stereo image pairs. The dataset ptovides both RGB images and dense depth maps.
+- **Issues**: The distribution of the subset is pretty skew, as it contains two extreme small subsets(smaller than 1000), and the total number of samples is quite small to be directly used for training and finetuning. On the other hand, depth maps were generated based on SFM techniques, so it contains large missing parts within the depth maps. The most important issue is that it is not a close-up dataset as expected.
+- **Content**: Consists of high-resolution RGB underwater images acquired in shallow Mediterranean waters near Israel. Each stereo pair is accompanied by detailed calibration data—including intrinsic and extrinsic camera parameters—and ground truth depth maps generated using photogrammetry. The dataset features diverse underwater scenes showcasing coral reefs, marine flora and fauna, and various natural and man-made structures.
+- **Purpose**: Designed to support research in underwater computer vision tasks such as depth estimation, 3D reconstruction, visual odometry, SLAM, obstacle detection, and autonomous underwater navigation. We decide to use it for accessing understandbility of the model for underwater rather than understandbility for close-up scenes.
+- **Source**: [FLSea Dataset Publication](https://arxiv.org/abs/2302.12772) | [GTS.AI FLSea Stereo Dataset](https://gts.ai/dataset-download/flsea-stereo-dataset/)
 - **Sample Images**:
   
-  [这里放置示例图片]
+  [这里放置示例图片]![01_000006_L](https://github.com/user-attachments/assets/3741c984-b493-494a-bdcd-1846ec71f387)
+
 
 #### SUIM (Segmentation of Underwater IMagery)
 - **Size**: [数据集大小，例如: 1,500 images with pixel-level annotations]
