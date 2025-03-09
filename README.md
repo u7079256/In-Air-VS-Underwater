@@ -37,13 +37,27 @@ This is a project repo specially created for visualizing and comparing different
 
 
 #### TartanAir (A Dataset to Push the Limits of Visual SLAM)
-- **Size**: Approximately 1 million frames (around 4 TB of data) collected from 1037 long motion sequences.
-- **Content**: Multi-modal sensor data captured in photo-realistic simulated environments using Unreal Engine and AirSim. Includes synchronized stereo RGB images, depth maps, segmentation labels, optical flow, LiDAR point clouds, and precise camera poses under diverse conditions such as varying lighting, weather, and dynamic scenes.
+- **Size**: Approximately 1 million frames (around 4 TB of data) collected from 1037 long motion sequences. It provides left and right RGB image pairs and corresponding depth maps. It also provides pose of the given cameras which may be useful in the future. 
+- **Issue**: Similarly, the depth range of Tartan-Air is still too large. For exmaple, the given sample shown below is of 1.94~77.81 meters.
+- **Content**: Multi-modal sensor data captured in photo-realistic simulated environments using Unreal Engine and AirSim. Includes synchronized stereo RGB images, depth maps, segmentation labels, optical flow, LiDAR point clouds, and precise camera poses under diverse conditions such as varying lighting, weather, and dynamic scenes. This dataset is much more larger than the FlSEA dataset mentioned above, which has already shown with good performance of monocular depth estimzatin for underwater environment. In other words, it could be used for training some SOTA models from scratch or doing funtuning.
 - **Purpose**: To serve as a challenging benchmark for advancing Visual SLAM and robot navigation algorithms by providing extensive, diverse, and high-fidelity data that mimics real-world complexities.
 - **Source**: [TartanAir Dataset Website](http://theairlab.org/tartanair-dataset/) | [Paper](https://arxiv.org/abs/2003.14338)
 - **Sample Images**:
   
-  [这里放置示例图片]
+<table>
+  <tr>
+    <td align="center">amusement, Easy, P001, id000000, left</td>
+    <td align="center">amusement, Easy, P001, id000000, right</td>
+    <td align="center">amusement, Easy, P001, id000000, left absolute depth</td>
+    <td align="center">amusement, Easy, P001, id000000, normalized left depth</td>
+  </tr>
+  <tr>
+    <td align="center"><img src="images/000000_left.png" alt="First Subset, img id 000006 left" width="400"/></td>
+    <td align="center"><img src="images/000000_right.png" alt="First Subset, img id 000006 right" width="400"/></td>
+    <td align="center"><img src="images/000000_left_depth_raw.png" alt="First Subset, img id 000006 left" width="400"/></td>
+    <td align="center"><img src="images/000000_left_depth_norm_color.png" alt="First Subset, img id 000006 right" width="400"/></td>
+  </tr>
+</table>
 
 #### UIEB (Underwater Image Enhancement Benchmark)
 - **Size**: [数据集大小]
