@@ -59,14 +59,30 @@ This is a project repo specially created for visualizing and comparing different
   </tr>
 </table>
 
-#### UIEB (Underwater Image Enhancement Benchmark)
-- **Size**: [数据集大小]
-- **Content**: [图像内容描述]
-- **Purpose**: Underwater image enhancement and restoration
-- **Source**: [Project Website](https://li-chongyi.github.io/proj_benchmark.html) | [Paper](https://ieeexplore.ieee.org/document/8917818)
+#### ScanNet
+- **Size**: 1513 scanned indoor scenes with over 2.5 million RGB-D frames. Compared with Tartan-Air, the previous one mainly forcusing on out-door scenes and ScanNet focus more on in-door world, which is more likely to satisfied our close-up settings. The depth maps could be rendered into 16-bit png format, which scale is of millimeter. The sample shown beloew is of depth range 1159mm~3763mm(within 4m)
+- **Content**: Rich indoor scene data captured with RGB-D sensors, including RGB images, depth maps, and 3D reconstructed meshes. Each scan is accompanied by detailed semantic annotations for objects and surfaces. 
+- **Issues**: ScanNet does not originally provide stereo pairs, but it provides the trajectory of the camera, which is more limited. Besides, it would be a good source for unrectified stereo depth/disparity estimation. The depth maps also got missing values which is shown below(the missing proportion is smaller than FlSEA).
+- **Purpose**: To facilitate research in 3D reconstruction, semantic segmentation, object recognition, and overall scene understanding in complex indoor environments.
+- **Source**: [Project Website](http://www.scan-net.org/) | [Paper](https://doi.org/10.1109/CVPR.2016.90)
 - **Sample Images**:
   
-  [这里放置示例图片]
+<table>
+  <tr>
+    <td align="center">scene0370_00, id0, the first frame</td>
+    <td align="center">scene0370_00, id100, the thrid frame</td>
+    <td align="center">scene0370_00, id0 16-bit depth</td>
+    <td align="center">scene0370_00, id0 8-bit</td>
+    <td align="center">scene0370_00, id0 normalized depth</td>
+  </tr>
+  <tr>
+    <td align="center"><img src="images/0.jpg" alt="First Subset, img id 000006 left" width="400"/></td>
+    <td align="center"><img src="images/100.jpg" alt="First Subset, img id 000006 left" width="400"/></td>
+    <td align="center"><img src="images/0.png" alt="First Subset, img id 000006 right" width="400"/></td>
+    <td align="center"><img src="images/0_depth_raw.png" alt="First Subset, img id 000006 left" width="400"/></td>
+    <td align="center"><img src="images/0_colored_pure.png" alt="First Subset, img id 000006 right" width="400"/></td>
+  </tr>
+</table>
 
 #### USR-248 (Underwater Scene Recognition)
 - **Size**: [数据集大小]
