@@ -92,6 +92,16 @@ This is a project repo specially created for visualizing and comparing different
 - **Source**: [Middlebury Stereo Benchmark](https://vision.middlebury.edu/stereo/)
 - **Samples**:
   This dataset only got a few samples, which could be directly preview online.
+#### Others:
+- [Scene Flow](https://lmb.informatik.uni-freiburg.de/resources/datasets/SceneFlowDatasets.en.html)
+- [Falling Things](https://research.nvidia.com/publication/2018-06_Falling-Things)
+- [HR-VS](https://drive.google.com/file/d/1SgEIrH_IQTKJOToUwR1rx4-237sThUqX/view)
+- [CREStereo Dataset](https://github.com/megvii-research/CREStereo/blob/master/dataset_download.sh)
+- [InStereo2K](https://github.com/YuhuaXu/StereoDataset)
+- [Middlebury](https://vision.middlebury.edu/stereo/data/)
+- [Sintel Stereo](http://sintel.is.tue.mpg.de/stereo)
+- [ETH3D](https://www.eth3d.net/datasets#low-res-two-view-training-data)
+Here we did not introduce KITTI series datasets as they are really well known.
 
 ### In-Air Table-Top Datasets
 #### StereOBJ-1M (Large-scale Stereo Image Dataset for 6D Object Pose Estimation)
