@@ -147,7 +147,8 @@ Here we did not introduce KITTI series datasets as they are really well known.
 <details>
 <summary>Evaluation Metrics</summary>
 This section describes the evaluation metrics used to assess the performance of depth estimation and stereo matching algorithms.
-
+Besides, during evaluation, we may only evaluate areas that got non-zero groud turth or within a specific value range in order to aviod make evaluation on meaningless areas and raise with high bias due to ground truth abnormal distribution.
+For exmaple, we may only evaluate the metrics that within 5m, and masked the rest of the image.
 ### Standard Depth Metrics
 
 Our evaluation follows standard metrics used in depth estimation literature:
