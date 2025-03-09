@@ -21,6 +21,7 @@ This is a project repo specially created for visualizing and comparing different
 - **Sample Images**:
   
   ![First Subset, img id 000006 left](images/01_000006_L.png)
+  ![First Subset, img id 000006 right](images/01_000006_R.png)
 
 
 #### SUIM (Segmentation of Underwater IMagery)
