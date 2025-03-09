@@ -35,7 +35,7 @@ This is a project repo specially created for visualizing and comparing different
   </tr>
 </table>
 
-
+### In-Air Stereo Datasets
 #### TartanAir (A Dataset to Push the Limits of Visual SLAM)
 - **Size**: Approximately 1 million frames (around 4 TB of data) collected from 1037 long motion sequences. It provides left and right RGB image pairs and corresponding depth maps. It also provides pose of the given cameras which may be useful in the future. 
 - **Issue**: Similarly, the depth range of Tartan-Air is still too large. For exmaple, the given sample shown below is of 1.94~77.81 meters.
@@ -84,33 +84,52 @@ This is a project repo specially created for visualizing and comparing different
   </tr>
 </table>
 
-#### USR-248 (Underwater Scene Recognition)
-- **Size**: [数据集大小]
-- **Content**: [图像内容描述]
-- **Purpose**: Scene classification and recognition for underwater environments
-- **Source**: [Paper](https://ieeexplore.ieee.org/document/8460552)
+
+#### Middlebury Stereo Dataset
+- **Size**: Approximately 8–15 high-resolution stereo image pairs, with the overall data volume typically under 1 GB.
+- **Content**: Consists of rectified stereo RGB image pairs captured in controlled indoor settings, each accompanied by dense and accurate ground truth disparity maps (which can be converted to depth information using camera calibration parameters).
+- **Purpose**: Serves as a classical benchmark for stereo matching and depth estimation algorithms, enabling precise evaluation of disparity calculation and 3D reconstruction methods.
+- **Source**: [Middlebury Stereo Benchmark](https://vision.middlebury.edu/stereo/)
+- **Samples**:
+  This dataset only got a few samples, which could be directly preview online.
+
+### In-Air Table-Top Datasets
+#### StereOBJ-1M (Large-scale Stereo Image Dataset for 6D Object Pose Estimation)
+- **Size**: Over 393K stereo image frames and more than 1.5M 6D pose annotations, collected from 182 scenes across 11 different environments. It is a table-top pose estimation dataset, which would be a good choice for accessing the performance for close-up environment.
+- **Content**: Stereo RGB images capturing 18 diverse objects—including symmetric, transparent, and reflective items—under challenging conditions such as occlusion, specularity, and varying illumination. Each image is fully annotated with accurate 6D object pose data, along with instance masks and bounding boxes.
+- **Issues**: This dataset does not originally provide ground truth depth, which would be a challenge to train supervised models and doing evaluatio on unsupervised models. As most unsupervised models still doing evaluation on groud truth depth. The stereo pairs are stored in a single image.
+- **Purpose**: Designed to advance research in 6D object pose estimation by providing a large-scale, challenging benchmark that addresses common real-world issues like transparency, occlusion, and environmental variations in stereo imagery.
+- **Source**: [arXiv:2109.10115](https://arxiv.org/abs/2109.10115) | [Project Website](https://sites.google.com/view/stereobj-1m)
 - **Sample Images**:
   
-  [这里放置示例图片]
+<table>
+  <tr>
+    <td align="center"><img src="images/562eec275ab81985045d2b5ebfacc5c.jpg" alt="First Subset, img id 000006 left" width="400"/></td>
+    <td align="center"><img src="images/711e2bf7950c55f37104332a4b09081.jpg" alt="First Subset, img id 000006 left" width="400"/></td>
+  </tr>
+</table>
 
-### In-Air Datasets (for comparison)
-
-#### COCO (Common Objects in Context)
-- **Size**: [数据集大小，例如: 330,000+ images with 80 object categories]
-- **Content**: [图像内容描述]
-- **Purpose**: Object detection, segmentation, and image captioning
-- **Source**: [COCO Dataset](https://cocodataset.org/)
+#### STIOS Dataset (Stereo Instances on Surfaces)
+- **Size**: The dataset comprises a large collection of high-resolution stereo image pairs; exact numbers can be found on the official webpage, but it typically contains on the order of hundreds to thousands of stereo pairs. It contains two similar subset that capture the same scene with two different cameras. We could regarded as the same. In each subset, there are 8 different scenes with 24 different stereo images each. Besides, the dataset is of table-top settings.
+- **Content**: This dataset features high-quality stereo RGB images captured from various surfaces in diverse environments. Each stereo pair is accompanied by detailed annotations including object instance segmentation masks and, where available, depth information, targeting challenging conditions such as occlusion, transparency, and specular reflections. In summary, it contains normals, pcd, depth, RGB, and instanca annotations.
+- **Issues**: The overall dataset size is the smallest one up to know, which is only able to use it for accessing the performance of the model(testing only)
+- **Purpose**: Designed to advance research in stereo vision, object instance segmentation, and 6D object pose estimation, the STIOS dataset provides a challenging benchmark for developing and evaluating algorithms under real-world conditions.
+- **Source**: [Dataset Website](https://www.dlr.de/en/rm/research/publications-and-downloads/datasets/stereoinstancesonsurfaces)
 - **Sample Images**:
-  
-  [这里放置示例图片]
-
-#### ImageNet
-- **Size**: [数据集大小，例如: 14 million images across 22,000 categories]
-- **Content**: [图像内容描述]
-- **Purpose**: Image classification and object recognition
-- **Source**: [ImageNet](https://www.image-net.org/)
-- **Sample Images**:
-  
-  [这里放置示例图片]
-
+  <table>
+  <tr>
+    <td align="center">left image</td>
+    <td align="center">right image</td>
+    <td align="center">depth map</td>
+    <td align="center">pcd map</td>
+    <td align="center">normals map</td>
+  </tr>
+  <tr>
+    <td align="center"><img src="images/15b4fee0c421c0520b06d07e474247b.png" alt="First Subset, img id 000006 left" width="400"/></td>
+    <td align="center"><img src="images/b28c9aa03bdab0743ab662306387a55.png" alt="First Subset, img id 000006 left" width="400"/></td>
+    <td align="center"><img src="images/99bc389f7d8470c15e1db0d1782da20.png" alt="First Subset, img id 000006 right" width="400"/></td>
+    <td align="center"><img src="images/a6f636a51592bfe61e01d73e6bd205d.png" alt="First Subset, img id 000006 left" width="400"/></td>
+    <td align="center"><img src="images/8d0a71afb047aaf03d4d5bc969bd589.png" alt="First Subset, img id 000006 right" width="400"/></td>
+  </tr>
+</table>
 </details>
