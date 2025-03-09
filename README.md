@@ -143,3 +143,48 @@ Here we did not introduce KITTI series datasets as they are really well known.
   </tr>
 </table>
 </details>
+
+<details>
+<summary>Evaluation Metrics</summary>
+This section describes the evaluation metrics used to assess the performance of depth estimation and stereo matching algorithms.
+
+### Standard Depth Metrics
+
+Our evaluation follows standard metrics used in depth estimation literature:
+
+| Metric | Description | Formula | Better | Meaning |
+|--------|-------------|---------|--------|---------|
+| abs_rel | Absolute Relative Error | $\frac{1}{N} \sum_{i=1}^{N} \frac{\|d_i - \hat{d}_i\|}{\hat{d}_i}$ | Lower | Measures the average relative depth error, normalized by the true depth. Less sensitive to errors in far regions compared to absolute metrics. |
+| sq_rel | Squared Relative Error | $\frac{1}{N} \sum_{i=1}^{N} \frac{\|d_i - \hat{d}_i\|^2}{\hat{d}_i}$ | Lower | Emphasizes larger depth errors by squaring the difference. Particularly sensitive to outliers and severe estimation errors. |
+| rms | Root Mean Squared Error | $\sqrt{\frac{1}{N} \sum_{i=1}^{N} \|d_i - \hat{d}_i\|^2}$ | Lower | Measures the average magnitude of depth errors in metric units (e.g., meters). Gives higher weight to larger errors. |
+| log_rms | Log Root Mean Squared Error | $\sqrt{\frac{1}{N} \sum_{i=1}^{N} \|\log(d_i) - \log(\hat{d}_i)\|^2}$ | Lower | Measures errors in logarithmic space, making it more sensitive to depth errors in close regions while being more tolerant to errors in distant regions. |
+| a1 | Threshold Accuracy (delta < 1.25) | $\%$ of $\max(\frac{d_i}{\hat{d}_i}, \frac{\hat{d}_i}{d_i}) < 1.25$ | Higher | Percentage of pixels where the relative error is within 25%. Indicates high-quality depth predictions. |
+| a2 | Threshold Accuracy (delta < 1.25²) | $\%$ of $\max(\frac{d_i}{\hat{d}_i}, \frac{\hat{d}_i}{d_i}) < 1.25^2$ | Higher | Percentage of pixels where the relative error is within 56.25%. Provides a more relaxed accuracy measure. |
+| a3 | Threshold Accuracy (delta < 1.25³) | $\%$ of $\max(\frac{d_i}{\hat{d}_i}, \frac{\hat{d}_i}{d_i}) < 1.25^3$ | Higher | Percentage of pixels where the relative error is within 95.31%. Identifies regions with significant errors. |
+| scale | Scaling Factor | $\text{median}(\hat{d}) / \text{median}(d)$ | - | The ratio used to align prediction and ground truth depths for scale-ambiguous methods (like monocular depth estimation). Not a performance metric but used for analysis. |
+
+where $d_i$ is the predicted depth and $\hat{d}_i$ is the ground truth depth.
+
+### Stereo-Specific Metrics
+Note that for stereo matching, we could also use those depth metrics mentioned above, just modify it into comparision between disparity will be enough.
+For evaluating stereo matching algorithms, we include:
+
+| Metric | Description | Formula | Better | Meaning |
+|--------|-------------|---------|--------|---------|
+| EPE-all | End-Point Error | $\frac{1}{N} \sum_{i=1}^{N} \|disp_i - \hat{disp}_i\|$ | Lower | Average absolute disparity error in pixels. Directly measures the accuracy of disparity estimation without converting to depth. |
+| D1-all | Disparity Error Rate | $\%$ of pixels where $\|disp_i - \hat{disp}_i\| > 3$ AND $\|disp_i - \hat{disp}_i\| / \hat{disp}_i > 0.05$ | Lower | Percentage of pixels with "significant" disparity errors (>3px absolute AND >5% relative). This is the standard error metric for the KITTI Stereo benchmark. |
+
+
+### Image Synthesis Metrics
+
+For evaluating image reconstruction quality:
+
+| Metric | Description | Formula | Better | Meaning |
+|--------|-------------|---------|--------|---------|
+| PSNR | Peak Signal-to-Noise Ratio | $20 \cdot \log_{10}\left(\frac{MAX_I}{\sqrt{MSE}}\right)$ | Higher | Measures the ratio between the maximum possible signal power and the noise power. Higher values indicate better quality. Generally, values above 30dB indicate good reconstruction. |
+| SSIM | Structural Similarity Index | $\frac{(2\mu_x\mu_y + C_1)(2\sigma_{xy} + C_2)}{(\mu_x^2 + \mu_y^2 + C_1)(\sigma_x^2 + \sigma_y^2 + C_2)}$ | Higher | Measures the perceived similarity between images by considering luminance, contrast, and structure. Values range from 0 to 1, with 1 indicating perfect similarity. More aligned with human perception than PSNR. |
+| photo_rmse | Photometric RMSE | $\sqrt{\frac{1}{N} \sum_{i=1}^{N} \|I_i - \hat{I}_i\|^2}$ | Lower | Root mean squared error between pixel values in the reconstructed and ground truth images. Directly measures pixel-wise accuracy of image reconstruction. |
+
+where $I_i$ is the reconstructed image and $\hat{I}_i$ is the ground truth image.
+
+</details>
