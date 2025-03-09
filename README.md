@@ -20,7 +20,7 @@ This is a project repo specially created for visualizing and comparing different
 - **Source**: [FLSea Dataset Publication](https://arxiv.org/abs/2302.12772) | [GTS.AI FLSea Stereo Dataset](https://gts.ai/dataset-download/flsea-stereo-dataset/)
 - **Sample Images**:
   
-  [这里放置示例图片]![01_000006_L](https://github.com/user-attachments/assets/3741c984-b493-494a-bdcd-1846ec71f387)
+  ![First Subset, img id 000006 left](images/01_000006_L.png)
 
 
 #### SUIM (Segmentation of Underwater IMagery)
