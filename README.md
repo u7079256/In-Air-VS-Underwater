@@ -20,8 +20,20 @@ This is a project repo specially created for visualizing and comparing different
 - **Source**: [FLSea Dataset Publication](https://arxiv.org/abs/2302.12772) | [GTS.AI FLSea Stereo Dataset](https://gts.ai/dataset-download/flsea-stereo-dataset/)
 - **Sample Images**:
   
-  ![First Subset, img id 000006 left](images/01_000006_L.png)
-  ![First Subset, img id 000006 right](images/01_000006_R.png)
+<table>
+  <tr>
+    <td align="center">First Subset, img id 000006 left</td>
+    <td align="center">First Subset, img id 000006 right</td>
+    <td align="center">First Subset, img id 000006 absolute left depth</td>
+    <td align="center">First Subset, img id 000006 normalized left depth</td>
+  </tr>
+  <tr>
+    <td align="center"><img src="images/01_000006_L.png" alt="First Subset, img id 000006 left" width="400"/></td>
+    <td align="center"><img src="images/01_000006_R.png" alt="First Subset, img id 000006 right" width="400"/></td>
+    <td align="center"><img src="images/LFT_01_000006_abs_depth.png" alt="First Subset, img id 000006 left" width="400"/></td>
+    <td align="center"><img src="images/LFT_01_000006_abs_depth_colored_pure.png" alt="First Subset, img id 000006 right" width="400"/></td>
+  </tr>
+</table>
 
 
 #### SUIM (Segmentation of Underwater IMagery)
