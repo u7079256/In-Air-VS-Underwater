@@ -12,7 +12,7 @@ This is a project repo specially created for visualizing and comparing different
 
 ### Underwater Datasets
 
-#### FLSea Stereo Dataset
+#### FLSea Stereo Dataset(Note that this dataset had been proofed that is not usable due to bad image quality, calibration quality, depth quality
 - **Size**: Comprises 4 distinct stereo subsets with each subset containing thousands of image pairs, totaling over 7337(3803+2362+867+305) synchronized stereo image pairs. The dataset ptovides both RGB images and dense depth maps.
 - **Issues**: The distribution of the subset is pretty skew, as it contains two extreme small subsets(smaller than 1000), and the total number of samples is quite small to be directly used for training and finetuning. On the other hand, depth maps were generated based on SFM techniques, so it contains large missing parts within the depth maps. The most important issue is that it is not a close-up dataset as expected.
 - **Content**: Consists of high-resolution RGB underwater images acquired in shallow Mediterranean waters near Israel. Each stereo pair is accompanied by detailed calibration data—including intrinsic and extrinsic camera parameters—and ground truth depth maps generated using photogrammetry. The dataset features diverse underwater scenes showcasing coral reefs, marine flora and fauna, and various natural and man-made structures.
@@ -34,6 +34,34 @@ This is a project repo specially created for visualizing and comparing different
     <td align="center"><img src="images/LFT_01_000006_abs_depth_colored_pure.png" alt="First Subset, img id 000006 right" width="400"/></td>
   </tr>
 </table>
+#### SQUID — Stereo Quantitative Underwater Image Dataset (Ambient Forward-Looking)
+
+* **Size**: **57** synchronized stereo pairs from four Israeli sites—**Katzaa** (15 pairs, 10–15 m), **Satil** (8 pairs, 20–30 m), **Nachsholim** (13 pairs, 3–6 m), **Mikhmoret** (21 pairs, 10–12 m). Release includes **RAW/TIF** images, **camera calibration files**, and **stereo-derived distance maps**. 
+* **Issues**: Small overall scale and site imbalance (15/8/13/21) make it better suited for **quantitative evaluation** than large-scale training/finetuning; stereo-derived distances can have limited coverage in texture-poor/occluded regions. *(Assessment based on dataset composition and its evaluation-oriented materials.)* 
+* **Content**: Natural **ambient-light**, **forward-looking** underwater scenes spanning tropical (Red Sea) and temperate (Mediterranean) waters; in-scene **color charts** support color-constancy evaluation; each sample includes a **true distance map** computed from stereo. 
+
+* **Purpose**: Designed primarily for **quantitative evaluation of single-image underwater color restoration** using stereo distances as reference; also useful for small-scale analysis of stereo/depth feasibility across water types. Official materials provide a paper, dataset splits, and **evaluation code**.
+
+* **Source**: [Publication (arXiv)](https://arxiv.org/abs/1811.01343) | [Dataset Page](https://csms.haifa.ac.il/profiles/tTreibitz/datasets/ambient_forwardlooking/index.html) | [Evaluation Code (GitHub)](https://github.com/danaberman/underwater-hl)
+
+* **Sample Images**:
+
+<table>
+  <tr>
+    <td align="center">Site: Katzaa — sample RGT_3008 (Left)</td>
+    <td align="center">Site: Katzaa — sample RGT_3008 (Right)</td>
+    <td align="center">RGT_3008 true distance (stereo-based)</td>
+    <td align="center">RGT_3008 normalized distance (viz)</td>
+  </tr>
+  <tr>
+    <td align="center"><img src="images/000000limg.png" alt="Katzaa example left" width="400"/></td>
+    <td align="center"><img src="images/000000rimg.png" alt="Katzaa example right" width="400"/></td>
+    <td align="center"><img src="images/000000l.png" alt="RGT_3008 True Distance(left)" width="400"/></td>
+    <td align="center"><img src="images/000000r.png" alt="RGT_3008 Normalized Distance(right, lower quality)" width="400"/></td>
+  </tr>
+</table>
+
+
 
 ### In-Air Stereo Datasets
 #### TartanAir (A Dataset to Push the Limits of Visual SLAM)
@@ -42,6 +70,8 @@ This is a project repo specially created for visualizing and comparing different
 - **Content**: Multi-modal sensor data captured in photo-realistic simulated environments using Unreal Engine and AirSim. Includes synchronized stereo RGB images, depth maps, segmentation labels, optical flow, LiDAR point clouds, and precise camera poses under diverse conditions such as varying lighting, weather, and dynamic scenes. This dataset is much more larger than the FlSEA dataset mentioned above, which has already shown with good performance of monocular depth estimzatin for underwater environment. In other words, it could be used for training some SOTA models from scratch or doing funtuning.
 - **Purpose**: To serve as a challenging benchmark for advancing Visual SLAM and robot navigation algorithms by providing extensive, diverse, and high-fidelity data that mimics real-world complexities.
 - **Source**: [TartanAir Dataset Website](http://theairlab.org/tartanair-dataset/) | [Paper](https://arxiv.org/abs/2003.14338)
+<span style="color:red">Note that it contains several subsets for underwater environment.</span>
+- **Note that it contains several subsets for underwater environment.**
 - **Sample Images**:
   
 <table>
@@ -170,10 +200,11 @@ where $d_i$ is the predicted depth and $\hat{d}_i$ is the ground truth depth.
 Note that for stereo matching, we could also use those depth metrics mentioned above, just modify it into comparision between disparity will be enough.
 For evaluating stereo matching algorithms, we include:
 
-| Metric | Description | Formula | Better | Meaning |
-|--------|-------------|---------|--------|---------|
-| EPE-all | End-Point Error | $\frac{1}{N} \sum_{i=1}^{N} \|disp_i - \hat{disp}_i\|$ | Lower | Average absolute disparity error in pixels. Directly measures the accuracy of disparity estimation without converting to depth. |
-| D1-all | Disparity Error Rate | $\%$ of pixels where $\|disp_i - \hat{disp}_i\| > 3$ AND $\|disp_i - \hat{disp}_i\| / \hat{disp}_i > 0.05$ | Lower | Percentage of pixels with "significant" disparity errors (>3px absolute AND >5% relative). This is the standard error metric for the KITTI Stereo benchmark. |
+| Metric     | Description                   | Formula                                                                                                            | Better | Meaning                                                                                                                                                          |
+| ---------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| EPE-all    | End-Point Error               | \$\frac{1}{N} \sum\_{i=1}^{N} \|disp\_i - \hat{disp}\_i\|\$                                                        | Lower  | Average absolute disparity error in pixels. Directly measures the accuracy of disparity estimation without converting to depth.                                  |
+| >3px Error(bad3) | Absolute Disparity Error Rate | \$%\$ of pixels where $\|disp\_i - \hat{disp}\_i\| > 3\$                                                           | Lower  | Percentage of pixels whose disparity error exceeds 3 pixels. A widely used absolute-threshold error metric in stereo evaluation.                                 |
+| D1-all     | Disparity Error Rate          | \$%\$ of pixels where $\|disp\_i - \hat{disp}\_i\| > 3\$ AND $\|disp\_i - \hat{disp}\_i\| / \hat{disp}\_i > 0.05\$ | Lower  | Percentage of pixels with "significant" disparity errors (>3px absolute **and** >5% relative). This is the standard error metric for the KITTI Stereo benchmark. |
 
 
 ### Image Synthesis Metrics
