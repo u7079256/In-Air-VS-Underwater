@@ -48,16 +48,16 @@ This is a project repo specially created for visualizing and comparing different
 
 <table>
   <tr>
-    <td align="center">Site: Katzaa — sample RGT_3008 (Left)</td>
-    <td align="center">Site: Katzaa — sample RGT_3008 (Right)</td>
-    <td align="center">RGT_3008 true distance (stereo-based)</td>
-    <td align="center">RGT_3008 normalized distance (viz)</td>
+    <td align="center">Site: Katzaa — Left</td>
+    <td align="center">Site: Katzaa — Right</td>
+    <td align="center">True Distance(left)</td>
+    <td align="center">True Distance(right, lower quality)</td>
   </tr>
   <tr>
     <td align="center"><img src="images/000000limg.png" alt="Katzaa example left" width="400"/></td>
     <td align="center"><img src="images/000000rimg.png" alt="Katzaa example right" width="400"/></td>
-    <td align="center"><img src="images/000000l.png" alt="RGT_3008 True Distance(left)" width="400"/></td>
-    <td align="center"><img src="images/000000r.png" alt="RGT_3008 Normalized Distance(right, lower quality)" width="400"/></td>
+    <td align="center"><img src="images/000000l.png" alt="True Distance(left)" width="400"/></td>
+    <td align="center"><img src="images/000000r.png" alt="True Distance(right, lower quality)" width="400"/></td>
   </tr>
 </table>
 
