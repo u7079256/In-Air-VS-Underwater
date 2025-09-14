@@ -193,7 +193,7 @@ Our evaluation follows standard metrics used in depth estimation literature:
 | a1 | Threshold Accuracy (delta < 1.25) | $\%$ of $\max(\frac{d_i}{\hat{d}_i}, \frac{\hat{d}_i}{d_i}) < 1.25$ | Higher | Percentage of pixels where the relative error is within 25%. Indicates high-quality depth predictions. |
 | a2 | Threshold Accuracy (delta < 1.25²) | $\%$ of $\max(\frac{d_i}{\hat{d}_i}, \frac{\hat{d}_i}{d_i}) < 1.25^2$ | Higher | Percentage of pixels where the relative error is within 56.25%. Provides a more relaxed accuracy measure. |
 | a3 | Threshold Accuracy (delta < 1.25³) | $\%$ of $\max(\frac{d_i}{\hat{d}_i}, \frac{\hat{d}_i}{d_i}) < 1.25^3$ | Higher | Percentage of pixels where the relative error is within 95.31%. Identifies regions with significant errors. |
-| scale | Scaling Factor | $\text{median}(\hat{d}) / \text{median}(d)$ | - | The ratio used to align prediction and ground truth depths for scale-ambiguous methods (like monocular depth estimation). Not a performance metric but used for analysis. |
+
 
 where $d_i$ is the predicted depth and $\hat{d}_i$ is the ground truth depth.
 
@@ -229,325 +229,470 @@ where $I_i$ is the reconstructed image and $\hat{I}_i$ is the ground truth image
 <summary><h2>📊 Baseline Visualization</h2></summary>
 TartanAir Underwater Visualization (Zero-shot)
 <div style="overflow-x: auto; position: relative;">
-<table>
+<table style="table-layout: fixed; width: 100%; min-width: 6000px;">
 <thead>
 <tr>
-<th rowspan="2" align="center" style="position: sticky; left: 0; z-index: 10; background: white;">Sample Images<br>(Left | Right | GT)</th>
-<th colspan="3" align="center">Foundation Stereo</th>
-<th colspan="3" align="center">Stereo Anywhere</th>
-<th colspan="3" align="center">Selective Raft</th>
-<th colspan="3" align="center">Selective IGEV</th>
-<th colspan="3" align="center">IGEV++</th>
-<th colspan="3" align="center">Raft Stereo</th>
-<th colspan="3" align="center">Tiodepth</th>
-<th colspan="3" align="center">Unimatch</th>
-<th colspan="3" align="center">AAnet</th>
-<th colspan="3" align="center">PSMNet</th>
+<th rowspan="2" align="center" style="position: sticky; left: 0; z-index: 10; background: white;">Sample Images<br>(Left | Right)</th>
+<th colspan="3" align="center"><a href="https://github.com/NVlabs/FoundationStereo/tree/master">Foundation Stereo</a></th>
+<th colspan="3" align="center"><a href="https://github.com/bartn8/stereoanywhere">StereoAnywhere<a></th>
+<th colspan="3" align="center"><a href="https://github.com/Windsrain/Selective-Stereo">Selective Raft</a></th>
+<th colspan="3" align="center"><a href="https://github.com/Windsrain/Selective-Stereo">Selective IGEV</a></th>
+<th colspan="3" align="center"><a href="https://github.com/gangweix/IGEV-plusplus">IGEV++</a></th>
+<th colspan="3" align="center"><a href="https://github.com/princeton-vl/RAFT-Stereo/tree/main">Raft Stereo</a></th>
+<th colspan="3" align="center"><a href="https://github.com/ZM-Zhou/TiO-Depth_pytorch?tab=readme-ov-file">TiO-Depth</a></th>
+<th colspan="3" align="center"><a href="https://github.com/autonomousvision/unimatch/tree/master">Unimatch</a></th>
+<th colspan="3" align="center"><a href="https://github.com/haofeixu/aanet">AAnet</a></th>
+<th colspan="3" align="center"><a href="https://github.com/JiaRenChang/PSMNet">PSMNet</a></th>
 </tr>
 <tr>
 <th align="center">Training Dataset</th>
-<th align="center">Pred Disparity<br>(Inverse Depth)</th>
-<th align="center">Error Map</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Pred Disparity<br>(Inverse Depth)</th>
-<th align="center">Error Map</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Pred Disparity<br>(Inverse Depth)</th>
-<th align="center">Error Map</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Pred Disparity<br>(Inverse Depth)</th>
-<th align="center">Error Map</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Pred Disparity<br>(Inverse Depth)</th>
-<th align="center">Error Map</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Pred Disparity<br>(Inverse Depth)</th>
-<th align="center">Error Map</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Pred Disparity<br>(Inverse Depth)</th>
-<th align="center">Error Map</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Pred Disparity<br>(Inverse Depth)</th>
-<th align="center">Error Map</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Pred Disparity<br>(Inverse Depth)</th>
-<th align="center">Error Map</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Pred Disparity<br>(Inverse Depth)</th>
-<th align="center">Error Map</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td align="center" style="position: sticky; left: 0; z-index: 10; background: white;">
 <b>Sample_001</b><br>
-<img src="images/000000_left.png" width="80" title="Left Image">
-<img src="images/000000_left.png" width="80" title="Right Image">
-<img src="images/000000_left.png" width="80" title="GT Disparity">
+<img src="images/easy000_000000l.png" width="80" title="Left Image">
+<img src="images/easy000_000000r.png" width="80" title="Right Image">
 </td>
-<td align="center">CREStereo</td>
-<td align="center"><img src="assets/tartanair/sample_001/foundation_stereo_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_001/foundation_stereo_error.png" width="100"></td>
-<td align="center">MiDaS</td>
-<td align="center"><img src="assets/tartanair/sample_001/stereo_anywhere_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_001/stereo_anywhere_error.png" width="100"></td>
+<td align="center">FSD</td>
+<td align="center"><img src="images/foundation_stereo_ocean_Easy_P000_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy000_000000l_plasma.png" width="100"></td>
 <td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_001/selective_raft_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_001/selective_raft_error.png" width="100"></td>
+<td align="center"><img src="images/stereoanywhere_ocean_Easy_P000_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy000_000000l_plasma.png" width="100"></td>
 <td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_001/selective_igev_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_001/selective_igev_error.png" width="100"></td>
+<td align="center"><img src="images/selective_RAFT_ocean_Easy_P000_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy000_000000l_plasma.png" width="100"></td>
 <td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_001/igev_pp_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_001/igev_pp_error.png" width="100"></td>
+<td align="center"><img src="images/selective_IGEV_ocean_Easy_P000_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy000_000000l_plasma.png" width="100"></td>
 <td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_001/raft_stereo_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_001/raft_stereo_error.png" width="100"></td>
-<td align="center">SceneFlow+KITTI</td>
-<td align="center"><img src="assets/tartanair/sample_001/tiodepth_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_001/tiodepth_error.png" width="100"></td>
+<td align="center"><img src="images/IGEV_ocean_Easy_P000_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy000_000000l_plasma.png" width="100"></td>
 <td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_001/unimatch_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_001/unimatch_error.png" width="100"></td>
+<td align="center"><img src="images/raft_stereo_ocean_Easy_P000_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy000_000000l_plasma.png" width="100"></td>
+<td align="center">KITTI2012</td>
+<td align="center"><img src="images/tio_depth_tartanair_ocean_Easy_P000_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy000_000000l_plasma.png" width="100"></td>
 <td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_001/aanet_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_001/aanet_error.png" width="100"></td>
+<td align="center"><img src="images/unimatch_ocean_Easy_P000_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy000_000000l_plasma.png" width="100"></td>
 <td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_001/psmnet_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_001/psmnet_error.png" width="100"></td>
+<td align="center"><img src="images/aanet_ocean_Easy_P000_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy000_000000l_plasma.png" width="100"></td>
+<td align="center">SceneFlow</td>
+<td align="center"><img src="images/psmnet_ocean_Easy_P000_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy000_000000l_plasma.png" width="100"></td>
 </tr>
+
+
+
 <tr>
 <td align="center" style="position: sticky; left: 0; z-index: 10; background: white;">
 <b>Sample_002</b><br>
-<img src="assets/tartanair/sample_002/left.png" width="80" title="Left Image">
-<img src="assets/tartanair/sample_002/right.png" width="80" title="Right Image">
-<img src="assets/tartanair/sample_002/gt.png" width="80" title="GT Disparity">
+<img src="images/easy004_000000l.png" width="80" title="Left Image">
+<img src="images/easy004_000000r.png" width="80" title="Right Image">
+
 </td>
-<td align="center">CREStereo</td>
-<td align="center"><img src="assets/tartanair/sample_002/foundation_stereo_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_002/foundation_stereo_error.png" width="100"></td>
-<td align="center">MiDaS</td>
-<td align="center"><img src="assets/tartanair/sample_002/stereo_anywhere_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_002/stereo_anywhere_error.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_002/selective_raft_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_002/selective_raft_error.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_002/selective_igev_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_002/selective_igev_error.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_002/igev_pp_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_002/igev_pp_error.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_002/raft_stereo_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_002/raft_stereo_error.png" width="100"></td>
-<td align="center">SceneFlow+KITTI</td>
-<td align="center"><img src="assets/tartanair/sample_002/tiodepth_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_002/tiodepth_error.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_002/unimatch_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_002/unimatch_error.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_002/aanet_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_002/aanet_error.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_002/psmnet_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_002/psmnet_error.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/foundation_stereo_ocean_Easy_P004_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy004_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/stereoanywhere_ocean_Easy_P004_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy004_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/selective_RAFT_ocean_Easy_P004_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy004_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/selective_IGEV_ocean_Easy_P004_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy004_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/IGEV_ocean_Easy_P004_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy004_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/raft_stereo_ocean_Easy_P004_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy004_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/tio_depth_tartanair_ocean_Easy_P004_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy004_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/unimatch_ocean_Easy_P004_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy004_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/aanet_ocean_Easy_P004_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy004_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/psmnet_ocean_Easy_P004_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy004_000000l_plasma.png" width="100"></td>
 </tr>
+
+
+
+
+
 <tr>
 <td align="center" style="position: sticky; left: 0; z-index: 10; background: white;">
 <b>Sample_003</b><br>
-<img src="assets/tartanair/sample_003/left.png" width="80" title="Left Image">
-<img src="assets/tartanair/sample_003/right.png" width="80" title="Right Image">
-<img src="assets/tartanair/sample_003/gt.png" width="80" title="GT Disparity">
+<img src="images/easy011_000000l.png" width="80" title="Left Image">
+<img src="images/easy011_000000r.png" width="80" title="Right Image">
+
 </td>
-<td align="center">CREStereo</td>
-<td align="center"><img src="assets/tartanair/sample_003/foundation_stereo_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_003/foundation_stereo_error.png" width="100"></td>
-<td align="center">MiDaS</td>
-<td align="center"><img src="assets/tartanair/sample_003/stereo_anywhere_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_003/stereo_anywhere_error.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_003/selective_raft_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_003/selective_raft_error.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_003/selective_igev_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_003/selective_igev_error.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_003/igev_pp_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_003/igev_pp_error.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_003/raft_stereo_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_003/raft_stereo_error.png" width="100"></td>
-<td align="center">SceneFlow+KITTI</td>
-<td align="center"><img src="assets/tartanair/sample_003/tiodepth_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_003/tiodepth_error.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_003/unimatch_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_003/unimatch_error.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_003/aanet_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_003/aanet_error.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/tartanair/sample_003/psmnet_pred.png" width="100"></td>
-<td align="center"><img src="assets/tartanair/sample_003/psmnet_error.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/foundation_stereo_ocean_Easy_P011_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy011_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/stereoanywhere_ocean_Easy_P011_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy011_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/selective_RAFT_ocean_Easy_P011_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy011_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/selective_IGEV_ocean_Easy_P011_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy011_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/igev_plusplus_ocean_Easy_P011_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy011_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/raft_stereo_ocean_Easy_P011_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy011_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/tio_depth_tartanair_ocean_Easy_P011_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy011_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/unimatch_ocean_Easy_P011_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy011_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/aanet_ocean_Easy_P011_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy011_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/psmnet_ocean_Easy_P011_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/easy011_000000l_plasma.png" width="100"></td>
 </tr>
+
+
+<tr>
+<td align="center" style="position: sticky; left: 0; z-index: 10; background: white;">
+<b>Sample_004</b><br>
+<img src="images/hard003_000000l.png" width="80" title="Left Image">
+<img src="images/hard003_000000r.png" width="80" title="Right Image">
+</td>
+<td align="center"></td>
+<td align="center"><img src="images/foundation_stereo_ocean_Hard_P003_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/hard003_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/stereoanywhere_ocean_Hard_P003_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/hard003_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/selective_RAFT_ocean_Hard_P003_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/hard003_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/selective_IGEV_ocean_Hard_P003_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/hard003_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/IGEV_ocean_Hard_P003_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/hard003_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/raft_stereo_ocean_Hard_P003_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/hard003_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/tio_depth_tartanair_ocean_Hard_P003_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/hard003_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/unimatch_ocean_Hard_P003_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/hard003_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/aanet_ocean_Hard_P003_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/hard003_000000l_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/psmnet_ocean_Hard_P003_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/hard003_000000l_plasma.png" width="100"></td>
+</tr>
+
+
 </tbody>
 </table>
 </div>
 
 
 SQUID Visualization (Zero-shot)
-<table>
+<div style="overflow-x: auto; position: relative;">
+<table style="table-layout: fixed; width: 100%; min-width: 6000px;">
 <thead>
 <tr>
-<th rowspan="2" align="center">Sample Name</th>
-<th colspan="3" align="center">Foundation Stereo</th>
-<th colspan="3" align="center">Stereo Anywhere</th>
-<th colspan="3" align="center">Selective Raft</th>
-<th colspan="3" align="center">Selective IGEV</th>
-<th colspan="3" align="center">IGEV++</th>
-<th colspan="3" align="center">Raft Stereo</th>
-<th colspan="3" align="center">Tiodepth</th>
-<th colspan="3" align="center">Unimatch</th>
-<th colspan="3" align="center">AAnet</th>
-<th colspan="3" align="center">PSMNet</th>
+<th rowspan="2" align="center" style="position: sticky; left: 0; z-index: 10; background: white;">Sample Images<br>(Left | Right)</th>
+<th colspan="3" align="center"><a href="https://github.com/NVlabs/FoundationStereo/tree/master">Foundation Stereo</a></th>
+<th colspan="3" align="center"><a href="https://github.com/bartn8/stereoanywhere">StereoAnywhere<a></th>
+<th colspan="3" align="center"><a href="https://github.com/Windsrain/Selective-Stereo">Selective Raft</a></th>
+<th colspan="3" align="center"><a href="https://github.com/Windsrain/Selective-Stereo">Selective IGEV</a></th>
+<th colspan="3" align="center"><a href="https://github.com/gangweix/IGEV-plusplus">IGEV++</a></th>
+<th colspan="3" align="center"><a href="https://github.com/princeton-vl/RAFT-Stereo/tree/main">Raft Stereo</a></th>
+<th colspan="3" align="center"><a href="https://github.com/ZM-Zhou/TiO-Depth_pytorch?tab=readme-ov-file">TiO-Depth</a></th>
+<th colspan="3" align="center"><a href="https://github.com/autonomousvision/unimatch/tree/master">Unimatch</a></th>
+<th colspan="3" align="center"><a href="https://github.com/haofeixu/aanet">AAnet</a></th>
+<th colspan="3" align="center"><a href="https://github.com/JiaRenChang/PSMNet">PSMNet</a></th>
 </tr>
 <tr>
 <th align="center">Training Dataset</th>
-<th align="center">Left Disparity<br>(Inverse Depth)</th>
-<th align="center">GT Disparity<br>(Inverse Depth)</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Left Disparity<br>(Inverse Depth)</th>
-<th align="center">GT Disparity<br>(Inverse Depth)</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Left Disparity<br>(Inverse Depth)</th>
-<th align="center">GT Disparity<br>(Inverse Depth)</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Left Disparity<br>(Inverse Depth)</th>
-<th align="center">GT Disparity<br>(Inverse Depth)</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Left Disparity<br>(Inverse Depth)</th>
-<th align="center">GT Disparity<br>(Inverse Depth)</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Left Disparity<br>(Inverse Depth)</th>
-<th align="center">GT Disparity<br>(Inverse Depth)</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Left Disparity<br>(Inverse Depth)</th>
-<th align="center">GT Disparity<br>(Inverse Depth)</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Left Disparity<br>(Inverse Depth)</th>
-<th align="center">GT Disparity<br>(Inverse Depth)</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Left Disparity<br>(Inverse Depth)</th>
-<th align="center">GT Disparity<br>(Inverse Depth)</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 <th align="center">Training Dataset</th>
-<th align="center">Left Disparity<br>(Inverse Depth)</th>
-<th align="center">GT Disparity<br>(Inverse Depth)</th>
+<th align="center">Pred Depth<br></th>
+<th align="center">GT Depth</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="center"><b>SQUID_001</b></td>
-<td align="center">KITTI</td>
-<td align="center"><img src="assets/squid/squid_001/kitti_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_001/kitti_gt.png" width="100"></td>
+<td align="center" style="position: sticky; left: 0; z-index: 10; background: white;">
+<b>Sample_001</b><br>
+<img src="images/Katzaa_000000_image_02.png" width="80" title="Left Image">
+<img src="images/Katzaa_000000_image_03.png" width="80" title="Right Image">
+</td>
+<td align="center">FSD</td>
+<td align="center"><img src="images/foundation_stereo_Katzaa_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Katzaa000000l_plasma.png" width="100"></td>
 <td align="center">SceneFlow</td>
-<td align="center"><img src="assets/squid/squid_001/sceneflow_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_001/sceneflow_gt.png" width="100"></td>
-<td align="center">Middlebury</td>
-<td align="center"><img src="assets/squid/squid_001/middlebury_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_001/middlebury_gt.png" width="100"></td>
-<td align="center">ETH3D</td>
-<td align="center"><img src="assets/squid/squid_001/eth3d_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_001/eth3d_gt.png" width="100"></td>
-<td align="center">DrivingStereo</td>
-<td align="center"><img src="assets/squid/squid_001/drivingstereo_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_001/drivingstereo_gt.png" width="100"></td>
-<td align="center">Sintel</td>
-<td align="center"><img src="assets/squid/squid_001/sintel_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_001/sintel_gt.png" width="100"></td>
-<td align="center">InStereo2K</td>
-<td align="center"><img src="assets/squid/squid_001/instereo2k_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_001/instereo2k_gt.png" width="100"></td>
-<td align="center">HR-VS</td>
-<td align="center"><img src="assets/squid/squid_001/hrvs_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_001/hrvs_gt.png" width="100"></td>
-<td align="center">Booster</td>
-<td align="center"><img src="assets/squid/squid_001/booster_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_001/booster_gt.png" width="100"></td>
-<td align="center">Spring</td>
-<td align="center"><img src="assets/squid/squid_001/spring_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_001/spring_gt.png" width="100"></td>
+<td align="center"><img src="images/stereoanywhere_Katzaa_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Katzaa000000l_plasma.png" width="100"></td>
+<td align="center">SceneFlow</td>
+<td align="center"><img src="images/selective_RAFT_Katzaa_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Katzaa000000l_plasma.png" width="100"></td>
+<td align="center">SceneFlow</td>
+<td align="center"><img src="images/selective_IGEV_Katzaa_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Katzaa000000l_plasma.png" width="100"></td>
+<td align="center">SceneFlow</td>
+<td align="center"><img src="images/igev_plusplus_Katzaa_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Katzaa000000l_plasma.png" width="100"></td>
+<td align="center">SceneFlow</td>
+<td align="center"><img src="images/raft_stereo_Katzaa_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Katzaa000000l_plasma.png" width="100"></td>
+<td align="center">KITTI2012</td>
+<td align="center"><img src="images/tio_depth_Katzaa_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Katzaa000000l_plasma.png" width="100"></td>
+<td align="center">SceneFlow</td>
+<td align="center"><img src="images/unimatch_Katzaa_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Katzaa000000l_plasma.png" width="100"></td>
+<td align="center">SceneFlow</td>
+<td align="center"><img src="images/aanet_Katzaa_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Katzaa000000l_plasma.png" width="100"></td>
+<td align="center">SceneFlow</td>
+<td align="center"><img src="images/psmnet_Katzaa_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Katzaa000000l_plasma.png" width="100"></td>
 </tr>
+
+
+
 <tr>
-<td align="center"><b>SQUID_002</b></td>
-<td align="center">KITTI</td>
-<td align="center"><img src="assets/squid/squid_002/kitti_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_002/kitti_gt.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/squid/squid_002/sceneflow_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_002/sceneflow_gt.png" width="100"></td>
-<td align="center">Middlebury</td>
-<td align="center"><img src="assets/squid/squid_002/middlebury_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_002/middlebury_gt.png" width="100"></td>
-<td align="center">ETH3D</td>
-<td align="center"><img src="assets/squid/squid_002/eth3d_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_002/eth3d_gt.png" width="100"></td>
-<td align="center">DrivingStereo</td>
-<td align="center"><img src="assets/squid/squid_002/drivingstereo_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_002/drivingstereo_gt.png" width="100"></td>
-<td align="center">Sintel</td>
-<td align="center"><img src="assets/squid/squid_002/sintel_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_002/sintel_gt.png" width="100"></td>
-<td align="center">InStereo2K</td>
-<td align="center"><img src="assets/squid/squid_002/instereo2k_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_002/instereo2k_gt.png" width="100"></td>
-<td align="center">HR-VS</td>
-<td align="center"><img src="assets/squid/squid_002/hrvs_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_002/hrvs_gt.png" width="100"></td>
-<td align="center">Booster</td>
-<td align="center"><img src="assets/squid/squid_002/booster_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_002/booster_gt.png" width="100"></td>
-<td align="center">Spring</td>
-<td align="center"><img src="assets/squid/squid_002/spring_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_002/spring_gt.png" width="100"></td>
+<td align="center" style="position: sticky; left: 0; z-index: 10; background: white;">
+<b>Sample_002</b><br>
+<img src="images/Michmoret_000000_image_02.png" width="80" title="Left Image">
+<img src="images/Michmoret_000000_image_03.png" width="80" title="Right Image">
+
+</td>
+<td align="center"></td>
+<td align="center"><img src="images/foundation_stereo_Michmoret_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Michmoret000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/stereoanywhere_Michmoret_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Michmoret000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/selective_RAFT_Michmoret_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Michmoret000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/selective_IGEV_Michmoret_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Michmoret000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/igev_plusplus_Michmoret_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Michmoret000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/raft_stereo_Michmoret_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Michmoret000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/tio_depth_Michmoret_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Michmoret000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/unimatch_Michmoret_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Michmoret000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/aanet_Michmoret_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Michmoret000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/psmnet_Michmoret_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Michmoret000000_plasma.png" width="100"></td>
 </tr>
+
+
+
+
+
 <tr>
-<td align="center"><b>SQUID_003</b></td>
-<td align="center">KITTI</td>
-<td align="center"><img src="assets/squid/squid_003/kitti_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_003/kitti_gt.png" width="100"></td>
-<td align="center">SceneFlow</td>
-<td align="center"><img src="assets/squid/squid_003/sceneflow_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_003/sceneflow_gt.png" width="100"></td>
-<td align="center">Middlebury</td>
-<td align="center"><img src="assets/squid/squid_003/middlebury_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_003/middlebury_gt.png" width="100"></td>
-<td align="center">ETH3D</td>
-<td align="center"><img src="assets/squid/squid_003/eth3d_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_003/eth3d_gt.png" width="100"></td>
-<td align="center">DrivingStereo</td>
-<td align="center"><img src="assets/squid/squid_003/drivingstereo_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_003/drivingstereo_gt.png" width="100"></td>
-<td align="center">Sintel</td>
-<td align="center"><img src="assets/squid/squid_003/sintel_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_003/sintel_gt.png" width="100"></td>
-<td align="center">InStereo2K</td>
-<td align="center"><img src="assets/squid/squid_003/instereo2k_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_003/instereo2k_gt.png" width="100"></td>
-<td align="center">HR-VS</td>
-<td align="center"><img src="assets/squid/squid_003/hrvs_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_003/hrvs_gt.png" width="100"></td>
-<td align="center">Booster</td>
-<td align="center"><img src="assets/squid/squid_003/booster_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_003/booster_gt.png" width="100"></td>
-<td align="center">Spring</td>
-<td align="center"><img src="assets/squid/squid_003/spring_left.png" width="100"></td>
-<td align="center"><img src="assets/squid/squid_003/spring_gt.png" width="100"></td>
+<td align="center" style="position: sticky; left: 0; z-index: 10; background: white;">
+<b>Sample_003</b><br>
+<img src="images/Nachsholim_000000_image_02.png" width="80" title="Left Image">
+<img src="images/Nachsholim_000000_image_03.png" width="80" title="Right Image">
+
+</td>
+<td align="center"></td>
+<td align="center"><img src="images/foundation_stereo_Nachsholim_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Nachsholim000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/stereoanywhere_Nachsholim_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Nachsholim000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/selective_RAFT_Nachsholim_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Nachsholim000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/selective_IGEV_Nachsholim_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Nachsholim000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/igev_plusplus_Nachsholim_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Nachsholim000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/raft_stereo_Nachsholim_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Nachsholim000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/tio_depth_Nachsholim_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Nachsholim000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/unimatch_Nachsholim_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Nachsholim000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/aanet_Nachsholim_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Nachsholim000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/psmnet_Nachsholim_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Nachsholim000000_plasma.png" width="100"></td>
 </tr>
+
+
+<tr>
+<td align="center" style="position: sticky; left: 0; z-index: 10; background: white;">
+<b>Sample_004</b><br>
+<img src="images/Satil_000000_image_02.png" width="80" title="Left Image">
+<img src="images/Satil_000000_image_03.png" width="80" title="Right Image">
+</td>
+<td align="center"></td>
+<td align="center"><img src="images/foundation_stereo_Satil_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Satil000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/stereoanywhere_Satil_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Satil000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/selective_RAFT_Satil_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Satil000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/selective_IGEV_Satil_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Satil000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/igev_plusplus_Satil_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Satil000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/raft_stereo_Satil_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Satil000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/tio_depth_Satil_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Satil000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/unimatch_Satil_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Satil000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/aanet_Satil_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Satil000000_plasma.png" width="100"></td>
+<td align="center"></td>
+<td align="center"><img src="images/psmnet_Satil_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/Satil000000_plasma.png" width="100"></td>
+</tr>
+
+
 </tbody>
 </table>
+</div>
+
+
+# Evaluation (10 Methods) — Max Depth: 50m
+
+| method | rel_err | sq_rel_err | rmse | log_rmse | a1 | a2 | a3 | epe | bad3 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| AAnet | 0.6857 | 9.3040 | 14.6230 | 2.6826 | 0.2604 | 0.3038 | 0.3338 | 54.9967 | 0.7595 |
+| Foundation Stereo | 0.0510 | 0.6126 | 3.2469 | 1.1777 | 0.8597 | 0.8732 | 0.8818 | 0.3702 | 0.0140 |
+| psmnet | 0.0984 | 0.9695 | 4.4251 | 1.4873 | 0.8013 | 0.8485 | 0.8799 | 0.7235 | 0.0297 |
+| TiO-depth | 0.7969 | 9.5611 | 15.0699 | 2.7127 | 0.0046 | 0.0085 | 0.0487 | 37.8464 | 1.1227 |
+| unimatch | 0.1750 | 2.4625 | 6.5423 | 1.8783 | 0.7438 | 0.8140 | 0.8457 | 0.9482 | 0.0449 |
+| selective_IGEV | 0.1367 | 1.6968 | 5.4126 | 1.6887 | 0.7549 | 0.8323 | 0.8570 | 0.8178 | 0.0402 |
+| selective_RAFT | 0.1057 | 0.9950 | 4.9086 | 1.5910 | 0.7850 | 0.8455 | 0.8753 | 0.7202 | 0.0298 |
+| stereoanywhere | 0.0654 | 0.5700 | 3.5224 | 1.2592 | 0.8291 | 0.8639 | 0.8659 | 0.5239 | 0.0175 |
+| IGEV | 0.1211 | 1.8382 | 5.2505 | 1.6583 | 0.7965 | 0.8546 | 0.8583 | 0.6573 | 0.0286 |
+| raft_stereo | 0.0901 | 0.8176 | 4.5086 | 1.5060 | 0.8127 | 0.8638 | 0.8673 | 0.6020 | 0.0232 |
+
+
+# SQUID Evaluation (10 Methods)
+
+| method | rel_err | sq_rel_err | rmse | log_rmse | a1 | a2 | a3 | epe | bad3 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| igev_plusplus | 0.1044 | 1.6478 | 2.7535 | 1.0129 | 0.9346 | 0.9712 | 0.8773 | 11.4860 | 0.6408 |
+| foundation_stereo | 0.0838 | 0.6381 | 2.1736 | 0.7764 | 0.9294 | 0.9698 | 0.8731 | 11.5613 | 0.5761 |
+| raft_stereo | 0.0915 | 0.7795 | 2.1647 | 0.7723 | 0.9235 | 0.9634 | 0.8641 | 11.6019 | 0.6068 |
+| stereoanywhere | 0.1065 | 1.2326 | 2.7146 | 0.9986 | 0.9179 | 0.9605 | 0.8714 | 10.6866 | 0.5897 |
+| selective_igev | 0.1061 | 1.0188 | 2.1200 | 0.7514 | 0.9171 | 0.9555 | 0.8557 | 20.4114 | 0.6153 |
+| selective_raft | 0.1285 | 0.4537 | 1.9704 | 0.6782 | 0.8558 | 0.9300 | 0.8641 | 29.8263 | 0.6744 |
+| psmnet | 0.5804 | 7.9420 | 5.5248 | 1.7092 | 0.7139 | 0.7909 | 0.7315 | 79.7753 | 0.7895 |
+| tio_depth | 1.4735 | 12.9600 | 7.8809 | 2.0644 | 0.1753 | 0.3346 | 0.4584 | 138.5537 | 0.9999 |
+| aanet | 8.2848 | 350.2032 | 38.3624 | 3.6471 | 0.0602 | 0.1087 | 0.1391 | 193.6751 | 0.9999 |
+| unimatch | 3.7029 | 154.8734 | 20.6817 | 3.0292 | 0.5300 | 0.6076 | 0.5916 | 98.4388 | 0.9501 |
 </details>
 
 
