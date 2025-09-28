@@ -512,7 +512,7 @@ SQUID Visualization (Zero-shot)
 <td align="center"><img src="images/selective_RAFT_Katzaa_000000_plasma.png" width="100"></td>
 <td align="center"><img src="images/Katzaa000000l_plasma.png" width="100"></td>
 <td align="center">SceneFlow</td>
-<td align="center"><img src="images/selective_IGEV_Katzaa_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/selective_igev_Katzaa_000000_plasma.png" width="100"></td>
 <td align="center"><img src="images/Katzaa000000l_plasma.png" width="100"></td>
 <td align="center">SceneFlow</td>
 <td align="center"><img src="images/igev_plusplus_Katzaa_000000_plasma.png" width="100"></td>
@@ -550,10 +550,10 @@ SQUID Visualization (Zero-shot)
 <td align="center"><img src="images/stereoanywhere_Michmoret_000000_plasma.png" width="100"></td>
 <td align="center"><img src="images/Michmoret000000_plasma.png" width="100"></td>
 <td align="center"></td>
-<td align="center"><img src="images/selective_RAFT_Michmoret_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/selective_raft_Michmoret_000000_plasma.png" width="100"></td>
 <td align="center"><img src="images/Michmoret000000_plasma.png" width="100"></td>
 <td align="center"></td>
-<td align="center"><img src="images/selective_IGEV_Michmoret_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/selective_igev_Michmoret_000000_plasma.png" width="100"></td>
 <td align="center"><img src="images/Michmoret000000_plasma.png" width="100"></td>
 <td align="center"></td>
 <td align="center"><img src="images/igev_plusplus_Michmoret_000000_plasma.png" width="100"></td>
@@ -593,10 +593,10 @@ SQUID Visualization (Zero-shot)
 <td align="center"><img src="images/stereoanywhere_Nachsholim_000000_plasma.png" width="100"></td>
 <td align="center"><img src="images/Nachsholim000000_plasma.png" width="100"></td>
 <td align="center"></td>
-<td align="center"><img src="images/selective_RAFT_Nachsholim_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/selective_raft_Nachsholim_000000_plasma.png" width="100"></td>
 <td align="center"><img src="images/Nachsholim000000_plasma.png" width="100"></td>
 <td align="center"></td>
-<td align="center"><img src="images/selective_IGEV_Nachsholim_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/selective_igev_Nachsholim_000000_plasma.png" width="100"></td>
 <td align="center"><img src="images/Nachsholim000000_plasma.png" width="100"></td>
 <td align="center"></td>
 <td align="center"><img src="images/igev_plusplus_Nachsholim_000000_plasma.png" width="100"></td>
@@ -632,10 +632,10 @@ SQUID Visualization (Zero-shot)
 <td align="center"><img src="images/stereoanywhere_Satil_000000_plasma.png" width="100"></td>
 <td align="center"><img src="images/Satil000000_plasma.png" width="100"></td>
 <td align="center"></td>
-<td align="center"><img src="images/selective_RAFT_Satil_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/selective_raft_Satil_000000_plasma.png" width="100"></td>
 <td align="center"><img src="images/Satil000000_plasma.png" width="100"></td>
 <td align="center"></td>
-<td align="center"><img src="images/selective_IGEV_Satil_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/selective_igev_Satil_000000_plasma.png" width="100"></td>
 <td align="center"><img src="images/Satil000000_plasma.png" width="100"></td>
 <td align="center"></td>
 <td align="center"><img src="images/igev_plusplus_Satil_000000_plasma.png" width="100"></td>
