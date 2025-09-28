@@ -381,7 +381,7 @@ TartanAir Underwater Visualization (Zero-shot)
 <td align="center"><img src="images/selective_IGEV_ocean_Easy_P011_000000_plasma.png" width="100"></td>
 <td align="center"><img src="images/easy011_000000l_plasma.png" width="100"></td>
 <td align="center"></td>
-<td align="center"><img src="images/igev_plusplus_ocean_Easy_P011_000000_plasma.png" width="100"></td>
+<td align="center"><img src="images/IGEV_ocean_Easy_P011_000000_plasma.png" width="100"></td>
 <td align="center"><img src="images/easy011_000000l_plasma.png" width="100"></td>
 <td align="center"></td>
 <td align="center"><img src="images/raft_stereo_ocean_Easy_P011_000000_plasma.png" width="100"></td>
