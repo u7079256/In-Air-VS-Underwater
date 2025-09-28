@@ -692,6 +692,8 @@
             .nav ul { gap: 15px; }
             .section { padding: 20px; }
         }
+
+
     </style>
 </head>
 <body>
@@ -1940,7 +1942,378 @@
                     </tr>
                 </tbody>
             </table>
+
+            <h3>ETH3D Evaluation - Reproduce Results with Pretrain Weight</h3>
+            
+            <style>
+                .eth3d-scroll-container::-webkit-scrollbar {
+                    height: 10px;
+                }
+                .eth3d-scroll-container::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                    border-radius: 4px;
+                }
+                .eth3d-scroll-container::-webkit-scrollbar-thumb {
+                    background: #888;
+                    border-radius: 4px;
+                }
+                .eth3d-scroll-container::-webkit-scrollbar-thumb:hover {
+                    background: #555;
+                }
+            </style>
+            
+            <div style="background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; padding: 15px; margin: 20px 0;">
+                <strong>⚠️ Important Notes:</strong>
+                <ul style="margin: 10px 0; padding-left: 25px;">
+                    <li>ETH3D test set is private, so all evaluations are performed on the ETH3D training set</li>
+                    <li>Most models are fine-tuned on ETH3D during training, so reproduced values should be significantly better than reported values</li>
+                    <li>Reported values typically refer to zero-shot or validation performance, while reproduced values may benefit from overfitting to the training set</li>
+                </ul>
+            </div>
+            
+            <div style="background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px; padding: 12px; margin: 20px 0;">
+                <strong>✅ Validation:</strong> Using RAFT-Stereo's official evaluation code for zero-shot testing on ETH3D training set (with SceneFlow pretrained weights), 
+                we obtained: <strong>EPE 0.267, D1 2.61%</strong>, which is consistent with our evaluation setup.
+            </div>
+            
+            <div style="background-color: #e8f4f8; border-left: 4px solid #0066cc; padding: 15px; margin: 20px 0;">
+                <strong>📐 Metrics Explanation:</strong>
+                <ul style="margin: 10px 0; padding-left: 25px;">
+                    <li><strong>Bad-X:</strong> Percentage of pixels with error > X pixels (lower is better)</li>
+                    <li><strong>EPE:</strong> End-Point-Error - mean absolute error in pixels (lower is better)</li>
+                    <li><strong>All:</strong> All valid pixels</li>
+                    <li><strong>Noc:</strong> Non-occluded pixels only</li>
+                    <li><strong>Occ:</strong> Occluded pixels only</li>
+                </ul>
+            </div>
+            
+            <div class="eth3d-scroll-container" style="overflow-x: auto; margin: 20px 0; border: 1px solid #dee2e6; border-radius: 4px;">
+            <div style="text-align: center; color: #666; font-size: 13px; margin: 10px 0;">
+                
+            </div>
+            <table class="results-table" style="min-width: 1400px;">
+                <thead>
+                    <tr style="background-color: #f8f9fa;">
+                        <th rowspan="3">Method</th>
+                        <th rowspan="3">Trained Dataset</th>
+                        <th rowspan="3">Validated Dataset</th>
+                        <th colspan="10" style="background-color: #e9ecef;">All Pixels</th>
+                        <th colspan="10" style="background-color: #e9ecef;">Non-occluded (Noc)</th>
+                        <th colspan="10" style="background-color: #e9ecef;">Occluded (Occ)</th>
+                    </tr>
+                    <tr style="background-color: #f8f9fa;">
+                        <th colspan="2">Bad-0.5 (%)</th>
+                        <th colspan="2">Bad-1.0 (%)</th>
+                        <th colspan="2">Bad-2.0 (%)</th>
+                        <th colspan="2">Bad-3.0 (%)</th>
+                        <th colspan="2">EPE (px)</th>
+                        <th colspan="2">Bad-0.5 (%)</th>
+                        <th colspan="2">Bad-1.0 (%)</th>
+                        <th colspan="2">Bad-2.0 (%)</th>
+                        <th colspan="2">Bad-3.0 (%)</th>
+                        <th colspan="2">EPE (px)</th>
+                        <th colspan="2">Bad-0.5 (%)</th>
+                        <th colspan="2">Bad-1.0 (%)</th>
+                        <th colspan="2">Bad-2.0 (%)</th>
+                        <th colspan="2">Bad-3.0 (%)</th>
+                        <th colspan="2">EPE (px)</th>
+                    </tr>
+                    <tr style="background-color: #f8f9fa;">
+                        <th>Report</th>
+                        <th>Repro</th>
+                        <th>Report</th>
+                        <th>Repro</th>
+                        <th>Report</th>
+                        <th>Repro</th>
+                        <th>Report</th>
+                        <th>Repro</th>
+                        <th>Report</th>
+                        <th>Repro</th>
+                        <th>Report</th>
+                        <th>Repro</th>
+                        <th>Report</th>
+                        <th>Repro</th>
+                        <th>Report</th>
+                        <th>Repro</th>
+                        <th>Report</th>
+                        <th>Repro</th>
+                        <th>Report</th>
+                        <th>Repro</th>
+                        <th>Report</th>
+                        <th>Repro</th>
+                        <th>Report</th>
+                        <th>Repro</th>
+                        <th>Report</th>
+                        <th>Repro</th>
+                        <th>Report</th>
+                        <th>Repro</th>
+                        <th>Report</th>
+                        <th>Repro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Foundation Stereo</strong></td>
+                        <td style="background-color: #f0f8ff; font-style: italic;">--</td>
+                        <td style="background-color: #f0f8ff; font-style: italic;">ETH3D</td>
+                        <td>--</td>
+                        <td>2.84</td>
+                        <td>--</td>
+                        <td>0.65</td>
+                        <td>--</td>
+                        <td>0.43</td>
+                        <td>--</td>
+                        <td>0.35</td>
+                        <td>--</td>
+                        <td>0.17</td>
+                        <td>--</td>
+                        <td>2.58</td>
+                        <td>--</td>
+                        <td>0.49</td>
+                        <td>--</td>
+                        <td>0.30</td>
+                        <td>--</td>
+                        <td>0.23</td>
+                        <td>--</td>
+                        <td>0.14</td>
+                        <td>--</td>
+                        <td>8.86</td>
+                        <td>--</td>
+                        <td>3.84</td>
+                        <td>--</td>
+                        <td>2.50</td>
+                        <td>--</td>
+                        <td>2.28</td>
+                        <td>--</td>
+                        <td>0.54</td>
+                    </tr>
+                    <tr>
+                        <td><strong>IGEV++</strong></td>
+                        <td style="background-color: #f0f8ff; font-style: italic;">--</td>
+                        <td style="background-color: #f0f8ff; font-style: italic;">ETH3D</td>
+                        <td>--</td>
+                        <td>0.98</td>
+                        <td>--</td>
+                        <td>0.50</td>
+                        <td>--</td>
+                        <td>0.38</td>
+                        <td>--</td>
+                        <td>0.35</td>
+                        <td>--</td>
+                        <td>0.09</td>
+                        <td>--</td>
+                        <td>0.63</td>
+                        <td>--</td>
+                        <td>0.18</td>
+                        <td>--</td>
+                        <td>0.07</td>
+                        <td>--</td>
+                        <td>0.05</td>
+                        <td>--</td>
+                        <td>0.05</td>
+                        <td>--</td>
+                        <td>7.68</td>
+                        <td>--</td>
+                        <td>6.21</td>
+                        <td>--</td>
+                        <td>5.74</td>
+                        <td>--</td>
+                        <td>5.57</td>
+                        <td>--</td>
+                        <td>0.80</td>
+                    </tr>
+                    <tr>
+                        <td><strong>RAFT-Stereo</strong></td>
+                        <td style="background-color: #f0f8ff; font-style: italic;">SceneFlow</td>
+                        <td style="background-color: #f0f8ff; font-style: italic;">ETH3D</td>
+                        <td>--</td>
+                        <td>8.24</td>
+                        <td>--</td>
+                        <td>2.61</td>
+                        <td>--</td>
+                        <td>1.25</td>
+                        <td>--</td>
+                        <td>0.94</td>
+                        <td>--</td>
+                        <td>0.27</td>
+                        <td>--</td>
+                        <td>7.76</td>
+                        <td>--</td>
+                        <td>2.28</td>
+                        <td>--</td>
+                        <td>1.04</td>
+                        <td>--</td>
+                        <td>0.77</td>
+                        <td>--</td>
+                        <td>0.25</td>
+                        <td>--</td>
+                        <td>17.85</td>
+                        <td>--</td>
+                        <td>8.43</td>
+                        <td>--</td>
+                        <td>4.43</td>
+                        <td>--</td>
+                        <td>3.33</td>
+                        <td>--</td>
+                        <td>0.65</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Selective-IGEV</strong></td>
+                        <td style="background-color: #f0f8ff; font-style: italic;">--</td>
+                        <td style="background-color: #f0f8ff; font-style: italic;">ETH3D</td>
+                        <td>--</td>
+                        <td>2.18</td>
+                        <td>--</td>
+                        <td>0.78</td>
+                        <td>--</td>
+                        <td>0.43</td>
+                        <td>--</td>
+                        <td>0.32</td>
+                        <td>--</td>
+                        <td>0.14</td>
+                        <td>--</td>
+                        <td>1.91</td>
+                        <td>--</td>
+                        <td>0.57</td>
+                        <td>--</td>
+                        <td>0.25</td>
+                        <td>--</td>
+                        <td>0.15</td>
+                        <td>--</td>
+                        <td>0.11</td>
+                        <td>--</td>
+                        <td>6.81</td>
+                        <td>--</td>
+                        <td>3.85</td>
+                        <td>--</td>
+                        <td>2.84</td>
+                        <td>--</td>
+                        <td>2.48</td>
+                        <td>--</td>
+                        <td>0.50</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Selective-RAFT</strong></td>
+                        <td style="background-color: #f0f8ff; font-style: italic;">--</td>
+                        <td style="background-color: #f0f8ff; font-style: italic;">ETH3D</td>
+                        <td>--</td>
+                        <td>3.54</td>
+                        <td>--</td>
+                        <td>0.83</td>
+                        <td>--</td>
+                        <td>0.40</td>
+                        <td>--</td>
+                        <td>0.30</td>
+                        <td>--</td>
+                        <td>0.16</td>
+                        <td>--</td>
+                        <td>3.12</td>
+                        <td>--</td>
+                        <td>0.60</td>
+                        <td>--</td>
+                        <td>0.21</td>
+                        <td>--</td>
+                        <td>0.12</td>
+                        <td>--</td>
+                        <td>0.13</td>
+                        <td>--</td>
+                        <td>10.86</td>
+                        <td>--</td>
+                        <td>5.45</td>
+                        <td>--</td>
+                        <td>3.71</td>
+                        <td>--</td>
+                        <td>3.34</td>
+                        <td>--</td>
+                        <td>0.62</td>
+                    </tr>
+                    <tr>
+                        <td><strong>StereoAnywhere</strong></td>
+                        <td style="background-color: #f0f8ff; font-style: italic;">--</td>
+                        <td style="background-color: #f0f8ff; font-style: italic;">ETH3D</td>
+                        <td>--</td>
+                        <td>7.53</td>
+                        <td>--</td>
+                        <td>2.37</td>
+                        <td>--</td>
+                        <td>1.18</td>
+                        <td>--</td>
+                        <td>0.76</td>
+                        <td>--</td>
+                        <td>0.33</td>
+                        <td>--</td>
+                        <td>7.06</td>
+                        <td>--</td>
+                        <td>2.16</td>
+                        <td>--</td>
+                        <td>1.05</td>
+                        <td>--</td>
+                        <td>0.68</td>
+                        <td>--</td>
+                        <td>0.32</td>
+                        <td>--</td>
+                        <td>15.29</td>
+                        <td>--</td>
+                        <td>5.63</td>
+                        <td>--</td>
+                        <td>2.91</td>
+                        <td>--</td>
+                        <td>1.88</td>
+                        <td>--</td>
+                        <td>0.56</td>
+                    </tr>
+                    <tr>
+                        <td><strong>UniMatch</strong></td>
+                        <td style="background-color: #f0f8ff; font-style: italic;">--</td>
+                        <td style="background-color: #f0f8ff; font-style: italic;">ETH3D</td>
+                        <td>--</td>
+                        <td>5.85</td>
+                        <td>--</td>
+                        <td>0.81</td>
+                        <td>--</td>
+                        <td>0.16</td>
+                        <td>--</td>
+                        <td>0.04</td>
+                        <td>--</td>
+                        <td>0.18</td>
+                        <td>--</td>
+                        <td>5.33</td>
+                        <td>--</td>
+                        <td>0.68</td>
+                        <td>--</td>
+                        <td>0.14</td>
+                        <td>--</td>
+                        <td>0.04</td>
+                        <td>--</td>
+                        <td>0.17</td>
+                        <td>--</td>
+                        <td>18.46</td>
+                        <td>--</td>
+                        <td>3.90</td>
+                        <td>--</td>
+                        <td>0.57</td>
+                        <td>--</td>
+                        <td>0.13</td>
+                        <td>--</td>
+                        <td>0.31</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 4px;">
+                <strong>📋 Notes:</strong>
+                <ul style="margin: 10px 0; padding-left: 25px;">
+                    <li><strong>Report:</strong> Values reported in the original papers (to be filled)</li>
+                    <li><strong>Repro:</strong> Values reproduced in this evaluation</li>
+                    <li><strong>--:</strong> Data not available or not reported</li>
+                </ul>
+            </div>
+            
         </section>
+
+
+        
     </div>
 
     <!-- Modal for enlarged images -->
