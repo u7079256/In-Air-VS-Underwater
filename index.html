@@ -5,41 +5,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stereo Depth Estimation Comparison</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #24292e;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
             max-width: 100%;
             margin: 0 auto;
-            padding: 20px;
-            background: #f6f8fa;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
         }
         
         h1 {
-            border-bottom: 2px solid #e1e4e8;
-            padding-bottom: 10px;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
         
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            padding: 20px;
+            background: #f6f8fa;
+            border-bottom: 1px solid #e1e4e8;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .view-mode {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        /* Table View Styles */
         .table-container {
             overflow-x: auto;
-            background: white;
-            border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-            margin: 20px 0;
+            padding: 20px;
         }
         
         table {
             width: 100%;
-            border-collapse: collapse;
-            min-width: 1200px;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 1400px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         th {
-            background: #f6f8fa;
-            padding: 12px;
+            background: linear-gradient(135deg, #f6f8fa 0%, #e1e4e8 100%);
+            padding: 12px 8px;
             text-align: center;
-            border: 1px solid #e1e4e8;
+            border: 1px solid #d1d5da;
             font-weight: 600;
+            font-size: 0.9em;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
         
         td {
@@ -47,23 +120,245 @@
             text-align: center;
             border: 1px solid #e1e4e8;
             background: white;
+            transition: background 0.2s;
+        }
+        
+        tr:hover td {
+            background: #f6f8fa;
+        }
+        
+        .sticky-column {
+            position: sticky;
+            left: 0;
+            background: white !important;
+            z-index: 5;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            min-width: 200px;
+        }
+        
+        .sample-label {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9em;
         }
         
         .thumbnail {
             cursor: pointer;
-            transition: transform 0.2s;
-            width: 120px;
+            transition: all 0.3s;
+            width: 100px;
             height: auto;
+            border-radius: 4px;
             display: inline-block;
             margin: 2px;
         }
         
         .thumbnail:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transform: scale(1.1);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 2;
+            position: relative;
         }
         
-        /* Modal for enlarged images */
+        .method-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        
+        .method-link:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+        
+        /* Gallery View Styles */
+        .gallery-view {
+            display: none;
+            padding: 30px;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .gallery-item {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            cursor: pointer;
+        }
+        
+        .gallery-item-title {
+            padding: 10px;
+            background: #f6f8fa;
+            font-weight: 600;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        /* Comparison View Styles */
+        .comparison-view {
+            display: none;
+            padding: 30px;
+        }
+        
+        .comparison-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .comparison-selectors {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .selector-group {
+            background: #f6f8fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .selector-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e1e4e8;
+            border-radius: 6px;
+            font-size: 1em;
+            background: white;
+            cursor: pointer;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .image-compare-wrapper {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .image-compare-slider {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            cursor: col-resize;
+        }
+        
+        .compare-image {
+            width: 100%;
+            display: block;
+        }
+        
+        .compare-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .compare-overlay img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .slider-handle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: white;
+            cursor: col-resize;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            transition: box-shadow 0.3s;
+        }
+        
+        .slider-handle:hover {
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.8);
+        }
+        
+        .slider-handle::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .slider-handle::after {
+            content: '◀ ▶';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            color: #667eea;
+            font-weight: bold;
+            z-index: 1;
+        }
+        
+        .compare-labels {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            pointer-events: none;
+        }
+        
+        .compare-label {
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -72,40 +367,73 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            overflow: auto;
+            background-color: rgba(0,0,0,0.95);
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         .modal-content {
+            position: relative;
             margin: auto;
             display: block;
             max-width: 90%;
             max-height: 90%;
-            margin-top: 50px;
+            margin-top: 2%;
+            animation: zoomIn 0.3s;
         }
         
-        .modal-content {
-            animation: zoom 0.3s;
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
         
-        @keyframes zoom {
-            from {transform: scale(0.5)}
-            to {transform: scale(1)}
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            font-size: 3em;
+            cursor: pointer;
+            padding: 20px;
+            transition: background 0.3s;
+            z-index: 1001;
         }
+        
+        .modal-nav:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .modal-nav.prev { left: 20px; }
+        .modal-nav.next { right: 20px; }
         
         .close {
             position: absolute;
-            top: 15px;
-            right: 35px;
+            top: 20px;
+            right: 40px;
             color: #f1f1f1;
             font-size: 40px;
             font-weight: bold;
             cursor: pointer;
+            z-index: 1001;
+            background: rgba(0,0,0,0.5);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
         }
         
-        .close:hover,
-        .close:focus {
-            color: #bbb;
+        .close:hover {
+            background: rgba(255,0,0,0.5);
+            transform: rotate(90deg);
         }
         
         .caption {
@@ -115,115 +443,470 @@
             max-width: 700px;
             text-align: center;
             color: #ccc;
-            padding: 10px 0;
+            padding: 20px 0;
+            font-size: 1.1em;
         }
         
-        .sample-label {
-            font-weight: bold;
-            background: #0366d6;
+        .modal-info {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
             color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2000;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8em; }
+            .controls { padding: 15px; }
+            .btn { padding: 8px 15px; font-size: 0.9em; }
+            .gallery-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+            .comparison-selectors { grid-template-columns: 1fr; }
+            .modal-nav { font-size: 2em; padding: 10px; }
+        }
+        
+        /* Help Tooltip */
+        .help-icon {
             display: inline-block;
-            margin-bottom: 8px;
-        }
-        
-        .method-link {
-            color: #0366d6;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        .method-link:hover {
-            text-decoration: underline;
-        }
-        
-        /* Comparison slider */
-        .comparison-container {
+            width: 25px;
+            height: 25px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 25px;
+            cursor: help;
+            margin-left: 10px;
             position: relative;
-            display: inline-block;
         }
         
-        .sticky-column {
-            position: sticky;
-            left: 0;
-            background: white;
-            z-index: 10;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        .help-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            white-space: nowrap;
+            font-size: 0.9em;
+            z-index: 100;
+        }
+        
+        .help-icon:hover .help-tooltip {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <h1>🔬 Stereo Depth Estimation Comparison</h1>
-    <p>Click on any image to view in full size. Use arrow keys to navigate between images.</p>
-    
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th rowspan="2" class="sticky-column">Sample Images<br>(Left | Right)</th>
-                    <th colspan="3"><a href="https://github.com/NVlabs/FoundationStereo" class="method-link">Foundation Stereo</a></th>
-                    <th colspan="3"><a href="https://github.com/bartn8/stereoanywhere" class="method-link">StereoAnywhere</a></th>
-                    <th colspan="3"><a href="https://github.com/Windsrain/Selective-Stereo" class="method-link">Selective RAFT</a></th>
-                    <th colspan="3"><a href="https://github.com/Windsrain/Selective-Stereo" class="method-link">Selective IGEV</a></th>
-                    <th colspan="3"><a href="https://github.com/gangweix/IGEV-plusplus" class="method-link">IGEV++</a></th>
-                    <th colspan="3"><a href="https://github.com/princeton-vl/RAFT-Stereo" class="method-link">RAFT Stereo</a></th>
-                    <th colspan="3"><a href="https://github.com/ZM-Zhou/TiO-Depth_pytorch" class="method-link">TiO-Depth</a></th>
-                    <th colspan="3"><a href="https://github.com/autonomousvision/unimatch" class="method-link">UniMatch</a></th>
-                    <th colspan="3"><a href="https://github.com/haofeixu/aanet" class="method-link">AANet</a></th>
-                    <th colspan="3"><a href="https://github.com/JiaRenChang/PSMNet" class="method-link">PSMNet</a></th>
-                </tr>
-                <tr>
-                    <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
-                    <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
-                    <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
-                    <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
-                    <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
-                    <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
-                    <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
-                    <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
-                    <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
-                    <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Sample 001 -->
-                <tr>
-                    <td class="sticky-column">
-                        <span class="sample-label">Sample_001</span><br>
-                        <img src="images/easy000_000000l.png" class="thumbnail" alt="Left Image" onclick="openModal(this)">
-                        <img src="images/easy000_000000r.png" class="thumbnail" alt="Right Image" onclick="openModal(this)">
-                    </td>
-                    <td>FSD</td>
-                    <td><img src="images/foundation_stereo_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Prediction"></td>
-                    <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Ground Truth"></td>
-                    <td>SceneFlow</td>
-                    <td><img src="images/stereoanywhere_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Prediction"></td>
-                    <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Ground Truth"></td>
-                    <!-- Continue for other methods... -->
-                </tr>
-                
-                <!-- Add more samples here -->
-            </tbody>
-        </table>
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
     </div>
 
-    <!-- Modal for displaying enlarged images -->
+    <div class="container">
+        <header>
+            <h1>🔬 Stereo Depth Estimation Comparison</h1>
+            <p class="subtitle">Interactive comparison of state-of-the-art stereo depth estimation methods</p>
+        </header>
+
+        <div class="controls">
+            <div class="view-mode">
+                <button class="btn active" onclick="switchView('table')">📊 Table View</button>
+                <button class="btn" onclick="switchView('gallery')">🖼️ Gallery View</button>
+                <button class="btn" onclick="switchView('comparison')">⚖️ Comparison Mode</button>
+            </div>
+            <div class="help-icon">?
+                <div class="help-tooltip">Click images to enlarge • Use arrow keys to navigate • ESC to close</div>
+            </div>
+        </div>
+
+        <!-- Table View -->
+        <div class="table-view" id="tableView">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="sticky-column">Sample Images<br>(Left | Right)</th>
+                            <th colspan="3"><a href="https://github.com/NVlabs/FoundationStereo" class="method-link">Foundation Stereo</a></th>
+                            <th colspan="3"><a href="https://github.com/bartn8/stereoanywhere" class="method-link">StereoAnywhere</a></th>
+                            <th colspan="3"><a href="https://github.com/Windsrain/Selective-Stereo" class="method-link">Selective RAFT</a></th>
+                            <th colspan="3"><a href="https://github.com/Windsrain/Selective-Stereo" class="method-link">Selective IGEV</a></th>
+                            <th colspan="3"><a href="https://github.com/gangweix/IGEV-plusplus" class="method-link">IGEV++</a></th>
+                            <th colspan="3"><a href="https://github.com/princeton-vl/RAFT-Stereo" class="method-link">RAFT Stereo</a></th>
+                            <th colspan="3"><a href="https://github.com/ZM-Zhou/TiO-Depth_pytorch" class="method-link">TiO-Depth</a></th>
+                            <th colspan="3"><a href="https://github.com/autonomousvision/unimatch" class="method-link">UniMatch</a></th>
+                            <th colspan="3"><a href="https://github.com/haofeixu/aanet" class="method-link">AANet</a></th>
+                            <th colspan="3"><a href="https://github.com/JiaRenChang/PSMNet" class="method-link">PSMNet</a></th>
+                        </tr>
+                        <tr>
+                            <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                            <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                            <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                            <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                            <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                            <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                            <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                            <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                            <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                            <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Sample 001 -->
+                        <tr>
+                            <td class="sticky-column">
+                                <span class="sample-label">Sample_001</span><br>
+                                <img src="images/easy000_000000l.png" class="thumbnail" alt="Sample 001 - Left Image" onclick="openModal(this)">
+                                <img src="images/easy000_000000r.png" class="thumbnail" alt="Sample 001 - Right Image" onclick="openModal(this)">
+                            </td>
+                            <td>FSD</td>
+                            <td><img src="images/foundation_stereo_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Sample 001 Prediction"></td>
+                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td>SceneFlow</td>
+                            <td><img src="images/stereoanywhere_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Sample 001 Prediction"></td>
+                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td>SceneFlow</td>
+                            <td><img src="images/selective_RAFT_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Sample 001 Prediction"></td>
+                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td>SceneFlow</td>
+                            <td><img src="images/selective_IGEV_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Sample 001 Prediction"></td>
+                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td>SceneFlow</td>
+                            <td><img src="images/IGEV_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Sample 001 Prediction"></td>
+                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td>SceneFlow</td>
+                            <td><img src="images/raft_stereo_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Sample 001 Prediction"></td>
+                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td>KITTI2012</td>
+                            <td><img src="images/tio_depth_tartanair_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Sample 001 Prediction"></td>
+                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td>SceneFlow</td>
+                            <td><img src="images/unimatch_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Sample 001 Prediction"></td>
+                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td>SceneFlow</td>
+                            <td><img src="images/aanet_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Sample 001 Prediction"></td>
+                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td>SceneFlow</td>
+                            <td><img src="images/psmnet_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Sample 001 Prediction"></td>
+                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                        </tr>
+
+                        <!-- Sample 002 -->
+                        <tr>
+                            <td class="sticky-column">
+                                <span class="sample-label">Sample_002</span><br>
+                                <img src="images/easy004_000000l.png" class="thumbnail" alt="Sample 002 - Left Image" onclick="openModal(this)">
+                                <img src="images/easy004_000000r.png" class="thumbnail" alt="Sample 002 - Right Image" onclick="openModal(this)">
+                            </td>
+                            <td></td>
+                            <td><img src="images/foundation_stereo_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Sample 002 Prediction"></td>
+                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/stereoanywhere_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Sample 002 Prediction"></td>
+                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/selective_RAFT_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Sample 002 Prediction"></td>
+                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/selective_IGEV_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Sample 002 Prediction"></td>
+                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/IGEV_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Sample 002 Prediction"></td>
+                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/raft_stereo_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Sample 002 Prediction"></td>
+                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/tio_depth_tartanair_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Sample 002 Prediction"></td>
+                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/unimatch_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Sample 002 Prediction"></td>
+                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/aanet_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Sample 002 Prediction"></td>
+                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/psmnet_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Sample 002 Prediction"></td>
+                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                        </tr>
+
+                        <!-- Sample 003 -->
+                        <tr>
+                            <td class="sticky-column">
+                                <span class="sample-label">Sample_003</span><br>
+                                <img src="images/easy011_000000l.png" class="thumbnail" alt="Sample 003 - Left Image" onclick="openModal(this)">
+                                <img src="images/easy011_000000r.png" class="thumbnail" alt="Sample 003 - Right Image" onclick="openModal(this)">
+                            </td>
+                            <td></td>
+                            <td><img src="images/foundation_stereo_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Sample 003 Prediction"></td>
+                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/stereoanywhere_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Sample 003 Prediction"></td>
+                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/selective_RAFT_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Sample 003 Prediction"></td>
+                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/selective_IGEV_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Sample 003 Prediction"></td>
+                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/igev_plusplus_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Sample 003 Prediction"></td>
+                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/raft_stereo_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Sample 003 Prediction"></td>
+                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/tio_depth_tartanair_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Sample 003 Prediction"></td>
+                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/unimatch_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Sample 003 Prediction"></td>
+                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/aanet_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Sample 003 Prediction"></td>
+                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/psmnet_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Sample 003 Prediction"></td>
+                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                        </tr>
+
+                        <!-- Sample 004 (Hard) -->
+                        <tr>
+                            <td class="sticky-column">
+                                <span class="sample-label">Sample_004 (Hard)</span><br>
+                                <img src="images/hard003_000000l.png" class="thumbnail" alt="Sample 004 - Left Image" onclick="openModal(this)">
+                                <img src="images/hard003_000000r.png" class="thumbnail" alt="Sample 004 - Right Image" onclick="openModal(this)">
+                            </td>
+                            <td></td>
+                            <td><img src="images/foundation_stereo_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Sample 004 Prediction"></td>
+                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/stereoanywhere_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Sample 004 Prediction"></td>
+                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/selective_RAFT_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Sample 004 Prediction"></td>
+                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/selective_IGEV_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Sample 004 Prediction"></td>
+                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/IGEV_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Sample 004 Prediction"></td>
+                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/raft_stereo_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Sample 004 Prediction"></td>
+                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/tio_depth_tartanair_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Sample 004 Prediction"></td>
+                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/unimatch_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Sample 004 Prediction"></td>
+                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/aanet_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Sample 004 Prediction"></td>
+                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td></td>
+                            <td><img src="images/psmnet_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Sample 004 Prediction"></td>
+                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Gallery View -->
+        <div class="gallery-view" id="galleryView">
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Gallery items will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Comparison View -->
+        <div class="comparison-view" id="comparisonView">
+            <div class="comparison-container">
+                <div class="comparison-selectors">
+                    <div class="selector-group">
+                        <label for="leftMethodSelect">Left Method:</label>
+                        <select id="leftMethodSelect" onchange="updateComparison()">
+                            <option value="foundation_stereo">Foundation Stereo</option>
+                            <option value="stereoanywhere">StereoAnywhere</option>
+                            <option value="selective_RAFT">Selective RAFT</option>
+                            <option value="selective_IGEV">Selective IGEV</option>
+                            <option value="igev_plusplus">IGEV++</option>
+                            <option value="raft_stereo">RAFT Stereo</option>
+                            <option value="tio_depth">TiO-Depth</option>
+                            <option value="unimatch">UniMatch</option>
+                            <option value="aanet">AANet</option>
+                            <option value="psmnet">PSMNet</option>
+                            <option value="ground_truth">Ground Truth</option>
+                        </select>
+                        
+                        <label for="sampleSelect" style="margin-top: 15px;">Sample:</label>
+                        <select id="sampleSelect" onchange="updateComparison()">
+                            <option value="001">Sample 001 (Easy)</option>
+                            <option value="004">Sample 002 (Easy)</option>
+                            <option value="011">Sample 003 (Easy)</option>
+                            <option value="003_hard">Sample 004 (Hard)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="selector-group">
+                        <label for="rightMethodSelect">Right Method:</label>
+                        <select id="rightMethodSelect" onchange="updateComparison()">
+                            <option value="ground_truth">Ground Truth</option>
+                            <option value="foundation_stereo">Foundation Stereo</option>
+                            <option value="stereoanywhere">StereoAnywhere</option>
+                            <option value="selective_RAFT">Selective RAFT</option>
+                            <option value="selective_IGEV">Selective IGEV</option>
+                            <option value="igev_plusplus">IGEV++</option>
+                            <option value="raft_stereo">RAFT Stereo</option>
+                            <option value="tio_depth">TiO-Depth</option>
+                            <option value="unimatch">UniMatch</option>
+                            <option value="aanet">AANet</option>
+                            <option value="psmnet">PSMNet</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="image-compare-wrapper">
+                    <div class="image-compare-slider" id="compareSlider">
+                        <img src="images/foundation_stereo_ocean_Easy_P000_000000_plasma.png" class="compare-image" id="baseImage" alt="Base comparison image">
+                        <div class="compare-overlay" id="compareOverlay">
+                            <img src="images/easy000_000000l_plasma.png" id="overlayImage" alt="Overlay comparison image">
+                        </div>
+                        <div class="slider-handle" id="sliderHandle"></div>
+                        <div class="compare-labels">
+                            <span class="compare-label" id="leftLabel">Foundation Stereo</span>
+                            <span class="compare-label" id="rightLabel">Ground Truth</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for enlarged images -->
     <div id="imageModal" class="modal">
         <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="modalImage">
+        <button class="modal-nav prev" onclick="navigateModal(-1)">❮</button>
+        <img class="modal-content" id="modalImage" alt="Enlarged view">
+        <button class="modal-nav next" onclick="navigateModal(1)">❯</button>
         <div class="caption" id="caption"></div>
+        <div class="modal-info">Press ESC to close • Use arrow keys to navigate</div>
     </div>
 
     <script>
         let currentImages = [];
         let currentIndex = 0;
+        let isSliderActive = false;
 
-        // Collect all thumbnail images
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             currentImages = Array.from(document.querySelectorAll('.thumbnail'));
+            switchView('table');
+            initializeComparison();
+            populateGallery();
         });
 
+        // View switching
+        function switchView(view) {
+            // Hide all views
+            document.getElementById('tableView').style.display = 'none';
+            document.getElementById('galleryView').style.display = 'none';
+            document.getElementById('comparisonView').style.display = 'none';
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected view and activate button
+            if (view === 'table') {
+                document.getElementById('tableView').style.display = 'block';
+                document.querySelectorAll('.btn')[0].classList.add('active');
+            } else if (view === 'gallery') {
+                document.getElementById('galleryView').style.display = 'block';
+                document.querySelectorAll('.btn')[1].classList.add('active');
+            } else if (view === 'comparison') {
+                document.getElementById('comparisonView').style.display = 'block';
+                document.querySelectorAll('.btn')[2].classList.add('active');
+                updateComparison();
+            }
+        }
+
+        // Populate gallery view
+        function populateGallery() {
+            const galleryGrid = document.getElementById('galleryGrid');
+            const methods = [
+                {name: 'Foundation Stereo', prefix: 'foundation_stereo'},
+                {name: 'StereoAnywhere', prefix: 'stereoanywhere'},
+                {name: 'Selective RAFT', prefix: 'selective_RAFT'},
+                {name: 'Selective IGEV', prefix: 'selective_IGEV'},
+                {name: 'IGEV++', prefix: 'IGEV', special: '011'},
+                {name: 'RAFT Stereo', prefix: 'raft_stereo'},
+                {name: 'TiO-Depth', prefix: 'tio_depth_tartanair'},
+                {name: 'UniMatch', prefix: 'unimatch'},
+                {name: 'AANet', prefix: 'aanet'},
+                {name: 'PSMNet', prefix: 'psmnet'}
+            ];
+            
+            const samples = [
+                {id: '000', label: 'Sample 001', type: 'Easy'},
+                {id: '004', label: 'Sample 002', type: 'Easy'},
+                {id: '011', label: 'Sample 003', type: 'Easy'},
+                {id: '003', label: 'Sample 004', type: 'Hard'}
+            ];
+            
+            let galleryHTML = '';
+            
+            methods.forEach(method => {
+                samples.forEach(sample => {
+                    let imagePath;
+                    if (method.prefix === 'IGEV' && sample.id === '011') {
+                        imagePath = `images/igev_plusplus_ocean_${sample.type}_P${sample.id}_000000_plasma.png`;
+                    } else {
+                        imagePath = `images/${method.prefix}_ocean_${sample.type}_P${sample.id}_000000_plasma.png`;
+                    }
+                    
+                    galleryHTML += `
+                        <div class="gallery-item">
+                            <div class="gallery-item-title">${method.name} - ${sample.label}</div>
+                            <img src="${imagePath}" onclick="openModal(this)" alt="${method.name} - ${sample.label}">
+                        </div>
+                    `;
+                });
+            });
+            
+            galleryGrid.innerHTML = galleryHTML;
+        }
+
+        // Modal functions
         function openModal(img) {
             const modal = document.getElementById('imageModal');
             const modalImg = document.getElementById('modalImage');
@@ -233,12 +916,31 @@
             modalImg.src = img.src;
             caption.innerHTML = img.alt || img.src.split('/').pop();
             
-            // Find current image index
+            // Update current images list based on current view
+            if (document.getElementById('galleryView').style.display === 'block') {
+                currentImages = Array.from(document.querySelectorAll('.gallery-item img'));
+            } else {
+                currentImages = Array.from(document.querySelectorAll('.thumbnail'));
+            }
+            
             currentIndex = currentImages.indexOf(img);
         }
 
         function closeModal() {
             document.getElementById('imageModal').style.display = 'none';
+        }
+
+        function navigateModal(direction) {
+            currentIndex += direction;
+            if (currentIndex < 0) currentIndex = currentImages.length - 1;
+            if (currentIndex >= currentImages.length) currentIndex = 0;
+            
+            const modalImg = document.getElementById('modalImage');
+            const caption = document.getElementById('caption');
+            const img = currentImages[currentIndex];
+            
+            modalImg.src = img.src;
+            caption.innerHTML = img.alt || img.src.split('/').pop();
         }
 
         // Keyboard navigation
@@ -255,53 +957,169 @@
             }
         });
 
-        function navigateModal(direction) {
-            currentIndex += direction;
-            if (currentIndex < 0) currentIndex = currentImages.length - 1;
-            if (currentIndex >= currentImages.length) currentIndex = 0;
-            
-            const modalImg = document.getElementById('modalImage');
-            const caption = document.getElementById('caption');
-            const img = currentImages[currentIndex];
-            
-            modalImg.src = img.src;
-            caption.innerHTML = img.alt || img.src.split('/').pop();
-        }
-
-        // Close modal when clicking outside the image
+        // Close modal when clicking outside
         document.getElementById('imageModal').addEventListener('click', function(event) {
             if (event.target === this) {
                 closeModal();
             }
         });
 
-
-                function initImageCompare() {
-            const sliders = document.querySelectorAll('.image-compare-slider');
+        // Comparison view functions
+        function initializeComparison() {
+            const slider = document.getElementById('compareSlider');
+            const overlay = document.getElementById('compareOverlay');
+            const handle = document.getElementById('sliderHandle');
             
-            sliders.forEach(slider => {
-                let isDown = false;
-                const overlay = slider.querySelector('.compare-overlay');
-                const handle = slider.querySelector('.slider-handle');
+            if (!slider || !overlay || !handle) return;
+            
+            // Mouse events
+            slider.addEventListener('mousedown', startSlider);
+            document.addEventListener('mousemove', moveSlider);
+            document.addEventListener('mouseup', stopSlider);
+            
+            // Touch events for mobile
+            slider.addEventListener('touchstart', startSlider);
+            document.addEventListener('touchmove', moveSlider);
+            document.addEventListener('touchend', stopSlider);
+            
+            function startSlider(e) {
+                e.preventDefault();
+                isSliderActive = true;
+                moveSlider(e);
+            }
+            
+            function moveSlider(e) {
+                if (!isSliderActive) return;
                 
-                slider.addEventListener('mousedown', () => isDown = true);
-                slider.addEventListener('mouseup', () => isDown = false);
-                slider.addEventListener('mouseleave', () => isDown = false);
+                const rect = slider.getBoundingClientRect();
+                let x;
                 
-                slider.addEventListener('mousemove', (e) => {
-                    if (!isDown) return;
-                    
-                    const x = e.offsetX;
-                    const width = slider.offsetWidth;
-                    const percentage = (x / width) * 100;
-                    
-                    overlay.style.width = percentage + '%';
-                    handle.style.left = percentage + '%';
-                });
+                if (e.touches) {
+                    x = e.touches[0].clientX - rect.left;
+                } else {
+                    x = e.clientX - rect.left;
+                }
+                
+                const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+                
+                overlay.style.width = percentage + '%';
+                handle.style.left = percentage + '%';
+            }
+            
+            function stopSlider() {
+                isSliderActive = false;
+            }
+        }
+
+        function updateComparison() {
+            const leftMethod = document.getElementById('leftMethodSelect').value;
+            const rightMethod = document.getElementById('rightMethodSelect').value;
+            const sample = document.getElementById('sampleSelect').value;
+            
+            let sampleNum, sampleType;
+            if (sample === '003_hard') {
+                sampleNum = '003';
+                sampleType = 'Hard';
+            } else {
+                sampleNum = sample;
+                sampleType = 'Easy';
+            }
+            
+            // Update images
+            const baseImage = document.getElementById('baseImage');
+            const overlayImage = document.getElementById('overlayImage');
+            
+            baseImage.src = getImagePath(rightMethod, sampleNum, sampleType);
+            overlayImage.src = getImagePath(leftMethod, sampleNum, sampleType);
+            
+            // Update labels
+            document.getElementById('leftLabel').textContent = getMethodName(leftMethod);
+            document.getElementById('rightLabel').textContent = getMethodName(rightMethod);
+            
+            // Reset slider to middle
+            document.getElementById('compareOverlay').style.width = '50%';
+            document.getElementById('sliderHandle').style.left = '50%';
+        }
+
+        function getImagePath(method, sampleNum, sampleType) {
+            if (method === 'ground_truth') {
+                if (sampleType === 'Hard') {
+                    return `images/hard${sampleNum}_000000l_plasma.png`;
+                } else {
+                    return `images/easy${sampleNum}_000000l_plasma.png`;
+                }
+            }
+            
+            let prefix = method;
+            if (method === 'igev_plusplus') {
+                if (sampleNum === '011') {
+                    return `images/igev_plusplus_ocean_${sampleType}_P${sampleNum}_000000_plasma.png`;
+                } else {
+                    return `images/IGEV_ocean_${sampleType}_P${sampleNum}_000000_plasma.png`;
+                }
+            } else if (method === 'tio_depth') {
+                prefix = 'tio_depth_tartanair';
+            } else if (method === 'selective_RAFT' || method === 'selective_IGEV') {
+                // Keep as is
+            } else if (method === 'IGEV') {
+                if (sampleNum === '011') {
+                    return `images/igev_plusplus_ocean_${sampleType}_P${sampleNum}_000000_plasma.png`;
+                }
+            }
+            
+            return `images/${prefix}_ocean_${sampleType}_P${sampleNum}_000000_plasma.png`;
+        }
+
+        function getMethodName(method) {
+            const names = {
+                'foundation_stereo': 'Foundation Stereo',
+                'stereoanywhere': 'StereoAnywhere',
+                'selective_RAFT': 'Selective RAFT',
+                'selective_IGEV': 'Selective IGEV',
+                'igev_plusplus': 'IGEV++',
+                'raft_stereo': 'RAFT Stereo',
+                'tio_depth': 'TiO-Depth',
+                'unimatch': 'UniMatch',
+                'aanet': 'AANet',
+                'psmnet': 'PSMNet',
+                'ground_truth': 'Ground Truth'
+            };
+            return names[method] || method;
+        }
+
+        // Add smooth scrolling for table view
+        const tableContainer = document.querySelector('.table-container');
+        if (tableContainer) {
+            let isScrolling = false;
+            let startX, scrollLeft;
+            
+            tableContainer.addEventListener('mousedown', (e) => {
+                if (e.target.tagName !== 'IMG') {
+                    isScrolling = true;
+                    startX = e.pageX - tableContainer.offsetLeft;
+                    scrollLeft = tableContainer.scrollLeft;
+                    tableContainer.style.cursor = 'grabbing';
+                }
+            });
+            
+            tableContainer.addEventListener('mouseleave', () => {
+                isScrolling = false;
+                tableContainer.style.cursor = 'grab';
+            });
+            
+            tableContainer.addEventListener('mouseup', () => {
+                isScrolling = false;
+                tableContainer.style.cursor = 'grab';
+            });
+            
+            tableContainer.addEventListener('mousemove', (e) => {
+                if (!isScrolling) return;
+                e.preventDefault();
+                const x = e.pageX - tableContainer.offsetLeft;
+                const walk = (x - startX) * 2;
+                tableContainer.scrollLeft = scrollLeft - walk;
             });
         }
-        
-        document.addEventListener('DOMContentLoaded', initImageCompare);
     </script>
 </body>
 </html>
