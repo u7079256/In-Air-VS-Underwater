@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stereo Depth Estimation Comparison</title>
+    <title>In-Air vs Underwater - Stereo Depth Estimation Comparison</title>
     <style>
         * {
             margin: 0;
@@ -15,42 +15,226 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
             line-height: 1.6;
             color: #24292e;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #ffffff;
             min-height: 100vh;
-            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #0366d6 0%, #2188ff 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .nav {
+            background: #f6f8fa;
+            border-bottom: 1px solid #e1e4e8;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .nav a {
+            color: #0366d6;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        .nav a:hover {
+            color: #2188ff;
+            background: rgba(3, 102, 214, 0.1);
         }
         
         .container {
             max-width: 100%;
             margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
+        h2 {
+            color: #0366d6;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e1e4e8;
+            font-size: 2em;
         }
         
-        h1 {
-            font-size: 2.5em;
+        h3 {
+            color: #586069;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        h4 {
+            color: #24292e;
+            margin-top: 20px;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-size: 1.2em;
         }
         
-        .subtitle {
-            font-size: 1.1em;
-            opacity: 0.9;
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+            color: #24292e;
         }
         
+        ul, ol {
+            margin-bottom: 15px;
+            margin-left: 30px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        strong {
+            color: #0366d6;
+            font-weight: 600;
+        }
+        
+        /* Dataset tables */
+        .dataset-table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .dataset-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #e1e4e8;
+        }
+        
+        .dataset-table img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .dataset-table img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        /* Links styling */
+        a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Code blocks */
+        code {
+            background: #f6f8fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        /* Metrics table */
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9em;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .metrics-table th {
+            background: #f6f8fa;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #e1e4e8;
+            font-weight: 600;
+        }
+        
+        .metrics-table td {
+            padding: 10px 12px;
+            border: 1px solid #e1e4e8;
+        }
+        
+        .metrics-table tr:hover {
+            background: #f6f8fa;
+        }
+        
+        /* Evaluation results table */
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9em;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .results-table th {
+            background: linear-gradient(135deg, #f6f8fa 0%, #e1e4e8 100%);
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #d1d5da;
+            font-weight: 600;
+        }
+        
+        .results-table td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #e1e4e8;
+        }
+        
+        .results-table tr:hover {
+            background: #f6f8fa;
+        }
+        
+        /* Interactive comparison controls */
         .controls {
             padding: 20px;
             background: #f6f8fa;
-            border-bottom: 1px solid #e1e4e8;
+            border-radius: 8px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: center;
             gap: 20px;
@@ -60,8 +244,8 @@
         .btn {
             padding: 10px 20px;
             background: white;
-            border: 2px solid #667eea;
-            color: #667eea;
+            border: 2px solid #0366d6;
+            color: #0366d6;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
@@ -69,53 +253,52 @@
         }
         
         .btn:hover {
-            background: #667eea;
+            background: #0366d6;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 12px rgba(3, 102, 214, 0.3);
         }
         
         .btn.active {
-            background: #667eea;
+            background: #0366d6;
             color: white;
         }
         
-        .view-mode {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        /* Table View Styles */
+        /* Table View Styles for visualization */
         .table-container {
             overflow-x: auto;
+            overflow-y: visible;
             padding: 20px;
+            position: relative;
+            max-width: 100%;
         }
         
-        table {
+        .comparison-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
             min-width: 1400px;
             background: white;
             border-radius: 8px;
-            overflow: hidden;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            table-layout: auto;
         }
         
-        th {
+        .comparison-table th {
             background: linear-gradient(135deg, #f6f8fa 0%, #e1e4e8 100%);
             padding: 12px 8px;
             text-align: center;
             border: 1px solid #d1d5da;
             font-weight: 600;
             font-size: 0.9em;
+            position: -webkit-sticky;
             position: sticky;
             top: 0;
             z-index: 10;
         }
         
-        td {
+        .comparison-table td {
             padding: 8px;
             text-align: center;
             border: 1px solid #e1e4e8;
@@ -123,22 +306,39 @@
             transition: background 0.2s;
         }
         
-        tr:hover td {
+        .comparison-table tr:hover td {
             background: #f6f8fa;
         }
         
         .sticky-column {
-            position: sticky;
-            left: 0;
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            left: 0 !important;
             background: white !important;
-            z-index: 5;
+            z-index: 20 !important;
             box-shadow: 2px 0 5px rgba(0,0,0,0.1);
             min-width: 200px;
         }
         
+        tbody .sticky-column {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            left: 0 !important;
+            background: white !important;
+            border-right: 2px solid #d1d5da !important;
+        }
+        
+        thead th.sticky-column {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            left: 0 !important;
+            z-index: 21 !important;
+            background: linear-gradient(135deg, #f6f8fa 0%, #e1e4e8 100%) !important;
+        }
+        
         .sample-label {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0366d6 0%, #2188ff 100%);
             color: white;
             padding: 4px 12px;
             border-radius: 20px;
@@ -165,14 +365,14 @@
         }
         
         .method-link {
-            color: #667eea;
+            color: #0366d6;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.2s;
         }
         
         .method-link:hover {
-            color: #764ba2;
+            color: #2188ff;
             text-decoration: underline;
         }
         
@@ -243,7 +443,7 @@
             display: block;
             margin-bottom: 10px;
             font-weight: 600;
-            color: #667eea;
+            color: #0366d6;
         }
         
         select {
@@ -258,7 +458,7 @@
         
         select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #0366d6;
         }
         
         .image-compare-wrapper {
@@ -269,6 +469,7 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            min-height: 400px;
         }
         
         .image-compare-slider {
@@ -276,11 +477,14 @@
             width: 100%;
             overflow: hidden;
             cursor: col-resize;
+            background: #000;
         }
         
         .compare-image {
             width: 100%;
             display: block;
+            height: auto;
+            object-fit: contain;
         }
         
         .compare-overlay {
@@ -290,12 +494,16 @@
             width: 50%;
             height: 100%;
             overflow: hidden;
+            border-right: 2px solid white;
         }
         
         .compare-overlay img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
         
         .slider-handle {
@@ -308,10 +516,11 @@
             cursor: col-resize;
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
             transition: box-shadow 0.3s;
+            z-index: 10;
         }
         
         .slider-handle:hover {
-            box-shadow: 0 0 30px rgba(102, 126, 234, 0.8);
+            box-shadow: 0 0 30px rgba(3, 102, 214, 0.8);
         }
         
         .slider-handle::before {
@@ -334,7 +543,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 14px;
-            color: #667eea;
+            color: #0366d6;
             font-weight: bold;
             z-index: 1;
         }
@@ -459,101 +668,676 @@
             font-size: 0.9em;
         }
         
-        /* Loading Animation */
-        .loading {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2000;
+        /* Warning/Note styles */
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
         }
         
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .note strong {
+            color: #856404;
         }
         
         /* Responsive Design */
         @media (max-width: 768px) {
-            h1 { font-size: 1.8em; }
+            .header h1 { font-size: 1.8em; }
             .controls { padding: 15px; }
             .btn { padding: 8px 15px; font-size: 0.9em; }
             .gallery-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
             .comparison-selectors { grid-template-columns: 1fr; }
             .modal-nav { font-size: 2em; padding: 10px; }
-        }
-        
-        /* Help Tooltip */
-        .help-icon {
-            display: inline-block;
-            width: 25px;
-            height: 25px;
-            background: #667eea;
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 25px;
-            cursor: help;
-            margin-left: 10px;
-            position: relative;
-        }
-        
-        .help-tooltip {
-            display: none;
-            position: absolute;
-            bottom: 35px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.9);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 6px;
-            white-space: nowrap;
-            font-size: 0.9em;
-            z-index: 100;
-        }
-        
-        .help-icon:hover .help-tooltip {
-            display: block;
+            .nav ul { gap: 15px; }
+            .section { padding: 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="loading" id="loading">
-        <div class="loading-spinner"></div>
+    <div class="header">
+        <h1>🌊 In-Air vs Underwater Stereo Depth Estimation</h1>
+        <p>Comprehensive visualization and comparison of different stereo depth estimation models' performance on underwater datasets. This project explores model generalization from in-air to underwater environments.</p>
     </div>
 
+    <nav class="nav">
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#datasets">Datasets</a></li>
+            <li><a href="#metrics">Evaluation Metrics</a></li>
+            <li><a href="#visualization">Baseline Visualization</a></li>
+            <li><a href="#results">Results</a></li>
+        </ul>
+    </nav>
+
     <div class="container">
-        <header>
-            <h1>🔬 Stereo Depth Estimation Comparison</h1>
-            <p class="subtitle">Interactive comparison of state-of-the-art stereo depth estimation methods</p>
-        </header>
+        
+        <!-- Overview Section -->
+        <section id="overview" class="section">
+            <h2>📋 Project Overview</h2>
+            <p>This project repository is specially created for visualizing and comparing different models' performance for underwater datasets. We include comprehensive analysis covering:</p>
+            <ul>
+                <li>Visualization for different encoders and their performance characteristics</li>
+                <li>Visualization of predictions for models under different settings and environments</li>
+                <li>Systematic evaluation for models on different datasets (underwater and in-air)</li>
+                <li>Detailed metric explanations and their meanings in context</li>
+                <li>Introduction and analysis of different datasets used in experiments</li>
+                <li>All related reference links to papers and project websites</li>
+            </ul>
+        </section>
+
+        <!-- Datasets Section -->
+        <section id="datasets" class="section">
+            <h2>📊 Datasets</h2>
+            
+            <h3>Underwater Datasets</h3>
+            
+            <h4>FLSea Stereo Dataset</h4>
+            <div class="note">
+                <strong>Note:</strong> This dataset has been proven to be not usable due to bad image quality, calibration quality, and depth quality issues.
+            </div>
+            <ul>
+                <li><strong>Size:</strong> Comprises 4 distinct stereo subsets with each subset containing thousands of image pairs, totaling over 7337 (3803+2362+867+305) synchronized stereo image pairs. The dataset provides both RGB images and dense depth maps.</li>
+                <li><strong>Issues:</strong> The distribution of the subset is pretty skewed, containing two extremely small subsets (smaller than 1000). Depth maps were generated based on SFM techniques, containing large missing parts. Most importantly, it is not a close-up dataset as expected.</li>
+                <li><strong>Content:</strong> High-resolution RGB underwater images acquired in shallow Mediterranean waters near Israel. Each stereo pair includes calibration data and ground truth depth maps generated using photogrammetry.</li>
+                <li><strong>Purpose:</strong> Designed to support research in underwater computer vision tasks such as depth estimation, 3D reconstruction, visual odometry, SLAM, obstacle detection, and autonomous underwater navigation.</li>
+                <li><strong>Source:</strong> <a href="https://arxiv.org/abs/2302.12772">FLSea Dataset Publication</a> | <a href="https://gts.ai/dataset-download/flsea-stereo-dataset/">GTS.AI FLSea Stereo Dataset</a></li>
+            </ul>
+            
+            <table class="dataset-table">
+                <tr>
+                    <td>First Subset, img id 000006 left</td>
+                    <td>First Subset, img id 000006 right</td>
+                    <td>First Subset, img id 000006 absolute left depth</td>
+                    <td>First Subset, img id 000006 normalized left depth</td>
+                </tr>
+                <tr>
+                    <td><img src="images/01_000006_L.png" alt="First Subset, img id 000006 left" onclick="openModal(this)"/></td>
+                    <td><img src="images/01_000006_R.png" alt="First Subset, img id 000006 right" onclick="openModal(this)"/></td>
+                    <td><img src="images/LFT_01_000006_abs_depth.png" alt="First Subset, img id 000006 left" onclick="openModal(this)"/></td>
+                    <td><img src="images/LFT_01_000006_abs_depth_colored_pure.png" alt="First Subset, img id 000006 right" onclick="openModal(this)"/></td>
+                </tr>
+            </table>
+            
+            <h4>SQUID — Stereo Quantitative Underwater Image Dataset (Ambient Forward-Looking)</h4>
+            <ul>
+                <li><strong>Size:</strong> 57 synchronized stereo pairs from four Israeli sites—Katzaa (15 pairs, 10–15 m), Satil (8 pairs, 20–30 m), Nachsholim (13 pairs, 3–6 m), Mikhmoret (21 pairs, 10–12 m).</li>
+                <li><strong>Issues:</strong> Small overall scale and site imbalance (15/8/13/21) make it better suited for quantitative evaluation than large-scale training/finetuning.</li>
+                <li><strong>Content:</strong> Natural ambient-light, forward-looking underwater scenes spanning tropical (Red Sea) and temperate (Mediterranean) waters; includes in-scene color charts for color-constancy evaluation.</li>
+                <li><strong>Purpose:</strong> Designed primarily for quantitative evaluation of single-image underwater color restoration using stereo distances as reference.</li>
+                <li><strong>Source:</strong> <a href="https://arxiv.org/abs/1811.01343">Publication (arXiv)</a> | <a href="https://csms.haifa.ac.il/profiles/tTreibitz/datasets/ambient_forwardlooking/index.html">Dataset Page</a> | <a href="https://github.com/danaberman/underwater-hl">Evaluation Code (GitHub)</a></li>
+            </ul>
+            
+            <table class="dataset-table">
+                <tr>
+                    <td>Site: Katzaa — Left</td>
+                    <td>Site: Katzaa — Right</td>
+                    <td>True Distance (left)</td>
+                    <td>True Distance (right, lower quality)</td>
+                </tr>
+                <tr>
+                    <td><img src="images/000000limg.png" alt="Katzaa example left" onclick="openModal(this)"/></td>
+                    <td><img src="images/000000rimg.png" alt="Katzaa example right" onclick="openModal(this)"/></td>
+                    <td><img src="images/000000l.png" alt="True Distance(left)" onclick="openModal(this)"/></td>
+                    <td><img src="images/000000r.png" alt="True Distance(right, lower quality)" onclick="openModal(this)"/></td>
+                </tr>
+            </table>
+            
+            <h3>In-Air Stereo Datasets</h3>
+            
+            <h4>TartanAir (A Dataset to Push the Limits of Visual SLAM)</h4>
+            <ul>
+                <li><strong>Size:</strong> Approximately 1 million frames (around 4 TB of data) collected from 1037 long motion sequences.</li>
+                <li><strong>Issue:</strong> The depth range is still too large. For example, the given sample shown below is of 1.94~77.81 meters.</li>
+                <li><strong>Content:</strong> Multi-modal sensor data captured in photo-realistic simulated environments using Unreal Engine and AirSim.</li>
+                <li><strong>Purpose:</strong> To serve as a challenging benchmark for advancing Visual SLAM and robot navigation algorithms.</li>
+                <li><strong>Source:</strong> <a href="http://theairlab.org/tartanair-dataset/">TartanAir Dataset Website</a> | <a href="https://arxiv.org/abs/2003.14338">Paper</a></li>
+            </ul>
+            <p style="color: #d73a49; font-weight: bold;">Note: It contains several subsets for underwater environment.</p>
+            
+            <table class="dataset-table">
+                <tr>
+                    <td>amusement, Easy, P001, id000000, left</td>
+                    <td>amusement, Easy, P001, id000000, right</td>
+                    <td>amusement, Easy, P001, id000000, left absolute depth</td>
+                    <td>amusement, Easy, P001, id000000, normalized left depth</td>
+                </tr>
+                <tr>
+                    <td><img src="images/000000_left.png" alt="First Subset, img id 000006 left" onclick="openModal(this)"/></td>
+                    <td><img src="images/000000_right.png" alt="First Subset, img id 000006 right" onclick="openModal(this)"/></td>
+                    <td><img src="images/000000_left_depth_raw.png" alt="First Subset, img id 000006 left" onclick="openModal(this)"/></td>
+                    <td><img src="images/000000_left_depth_norm_color.png" alt="First Subset, img id 000006 right" onclick="openModal(this)"/></td>
+                </tr>
+            </table>
+            
+            <h4>ScanNet</h4>
+            <ul>
+                <li><strong>Size:</strong> 1513 scanned indoor scenes with over 2.5 million RGB-D frames.</li>
+                <li><strong>Content:</strong> Rich indoor scene data captured with RGB-D sensors, including RGB images, depth maps, and 3D reconstructed meshes.</li>
+                <li><strong>Issues:</strong> Does not originally provide stereo pairs, but provides camera trajectory. Depth maps have missing values (smaller proportion than FLSea).</li>
+                <li><strong>Purpose:</strong> To facilitate research in 3D reconstruction, semantic segmentation, object recognition, and overall scene understanding.</li>
+                <li><strong>Source:</strong> <a href="http://www.scan-net.org/">Project Website</a> | <a href="https://arxiv.org/abs/1702.04405">Paper</a></li>
+            </ul>
+            
+            <table class="dataset-table">
+                <tr>
+                    <td>scene0370_00, id0, first frame</td>
+                    <td>scene0370_00, id100, third frame</td>
+                    <td>scene0370_00, id0 16-bit depth</td>
+                    <td>scene0370_00, id0 8-bit</td>
+                    <td>scene0370_00, id0 normalized depth</td>
+                </tr>
+                <tr>
+                    <td><img src="images/0.jpg" alt="First frame" onclick="openModal(this)"/></td>
+                    <td><img src="images/100.jpg" alt="Third frame" onclick="openModal(this)"/></td>
+                    <td><img src="images/0.png" alt="16-bit depth" onclick="openModal(this)"/></td>
+                    <td><img src="images/0_depth_raw.png" alt="8-bit depth" onclick="openModal(this)"/></td>
+                    <td><img src="images/0_colored_pure.png" alt="Normalized depth" onclick="openModal(this)"/></td>
+                </tr>
+            </table>
+            
+            <h4>Middlebury Stereo Dataset</h4>
+            <ul>
+                <li><strong>Size:</strong> Approximately 8–15 high-resolution stereo image pairs, with overall data volume typically under 1 GB.</li>
+                <li><strong>Content:</strong> Rectified stereo RGB image pairs captured in controlled indoor settings with dense ground truth disparity maps.</li>
+                <li><strong>Purpose:</strong> Classical benchmark for stereo matching and depth estimation algorithms.</li>
+                <li><strong>Source:</strong> <a href="https://vision.middlebury.edu/stereo/">Middlebury Stereo Benchmark</a></li>
+            </ul>
+            
+            <h4>Other Datasets</h4>
+            <ul>
+                <li><a href="https://lmb.informatik.uni-freiburg.de/resources/datasets/SceneFlowDatasets.en.html">Scene Flow</a></li>
+                <li><a href="https://research.nvidia.com/publication/2018-06_Falling-Things">Falling Things</a></li>
+                <li><a href="https://drive.google.com/file/d/1SgEIrH_IQTKJOToUwR1rx4-237sThUqX/view">HR-VS</a></li>
+                <li><a href="https://github.com/megvii-research/CREStereo/blob/master/dataset_download.sh">CREStereo Dataset</a></li>
+                <li><a href="https://github.com/YuhuaXu/StereoDataset">InStereo2K</a></li>
+                <li><a href="https://vision.middlebury.edu/stereo/data/">Middlebury</a></li>
+                <li><a href="http://sintel.is.tue.mpg.de/stereo">Sintel Stereo</a></li>
+                <li><a href="https://www.eth3d.net/datasets#low-res-two-view-training-data">ETH3D</a></li>
+            </ul>
+            <p><em>Note: We did not introduce KITTI series datasets as they are well known.</em></p>
+            
+            <h3>In-Air Table-Top Datasets</h3>
+            
+            <h4>StereOBJ-1M (Large-scale Stereo Image Dataset for 6D Object Pose Estimation)</h4>
+            <ul>
+                <li><strong>Size:</strong> Over 393K stereo image frames and more than 1.5M 6D pose annotations, collected from 182 scenes across 11 different environments.</li>
+                <li><strong>Content:</strong> Stereo RGB images capturing 18 diverse objects—including symmetric, transparent, and reflective items—under challenging conditions.</li>
+                <li><strong>Issues:</strong> Does not originally provide ground truth depth. Stereo pairs are stored in a single image.</li>
+                <li><strong>Purpose:</strong> Designed to advance research in 6D object pose estimation.</li>
+                <li><strong>Source:</strong> <a href="https://arxiv.org/abs/2109.10115">arXiv:2109.10115</a> | <a href="https://sites.google.com/view/stereobj-1m">Project Website</a></li>
+            </ul>
+            
+            <table class="dataset-table">
+                <tr>
+                    <td><img src="images/562eec275ab81985045d2b5ebfacc5c.jpg" alt="StereOBJ sample 1" onclick="openModal(this)"/></td>
+                    <td><img src="images/711e2bf7950c55f37104332a4b09081.jpg" alt="StereOBJ sample 2" onclick="openModal(this)"/></td>
+                </tr>
+            </table>
+            
+            <h4>STIOS Dataset (Stereo Instances on Surfaces)</h4>
+            <ul>
+                <li><strong>Size:</strong> 8 different scenes with 24 different stereo images each. Table-top settings.</li>
+                <li><strong>Content:</strong> High-quality stereo RGB images with normals, point clouds, depth, RGB, and instance annotations.</li>
+                <li><strong>Issues:</strong> Small overall dataset size, only suitable for testing/evaluation.</li>
+                <li><strong>Purpose:</strong> Designed to advance research in stereo vision, object instance segmentation, and 6D object pose estimation.</li>
+                <li><strong>Source:</strong> <a href="https://www.dlr.de/en/rm/research/publications-and-downloads/datasets/stereoinstancesonsurfaces">Dataset Website</a></li>
+            </ul>
+            
+            <table class="dataset-table">
+                <tr>
+                    <td>left image</td>
+                    <td>right image</td>
+                    <td>depth map</td>
+                    <td>pcd map</td>
+                    <td>normals map</td>
+                </tr>
+                <tr>
+                    <td><img src="images/15b4fee0c421c0520b06d07e474247b.png" alt="STIOS left" onclick="openModal(this)"/></td>
+                    <td><img src="images/b28c9aa03bdab0743ab662306387a55.png" alt="STIOS right" onclick="openModal(this)"/></td>
+                    <td><img src="images/99bc389f7d8470c15e1db0d1782da20.png" alt="STIOS depth" onclick="openModal(this)"/></td>
+                    <td><img src="images/a6f636a51592bfe61e01d73e6bd205d.png" alt="STIOS pcd" onclick="openModal(this)"/></td>
+                    <td><img src="images/8d0a71afb047aaf03d4d5bc969bd589.png" alt="STIOS normals" onclick="openModal(this)"/></td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Evaluation Metrics Section -->
+        <section id="metrics" class="section">
+            <h2>📏 Evaluation Metrics</h2>
+            <p>This section describes the evaluation metrics used to assess the performance of depth estimation and stereo matching algorithms. During evaluation, we may only evaluate areas that have non-zero ground truth or within a specific value range to avoid bias from abnormal ground truth distribution.</p>
+            
+            <h3>Standard Depth Metrics</h3>
+            <p>Our evaluation follows standard metrics used in depth estimation literature:</p>
+            
+            <table class="metrics-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Description</th>
+                        <th>Formula</th>
+                        <th>Better</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>abs_rel</strong></td>
+                        <td>Absolute Relative Error</td>
+                        <td>(1/N) Σ |d_i - d̂_i|/d̂_i</td>
+                        <td>Lower</td>
+                        <td>Measures average relative depth error, normalized by true depth. Less sensitive to errors in far regions.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>sq_rel</strong></td>
+                        <td>Squared Relative Error</td>
+                        <td>(1/N) Σ |d_i - d̂_i|²/d̂_i</td>
+                        <td>Lower</td>
+                        <td>Emphasizes larger depth errors by squaring the difference. Particularly sensitive to outliers.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>rms</strong></td>
+                        <td>Root Mean Squared Error</td>
+                        <td>√[(1/N) Σ |d_i - d̂_i|²]</td>
+                        <td>Lower</td>
+                        <td>Measures average magnitude of depth errors in metric units (e.g., meters).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>log_rms</strong></td>
+                        <td>Log Root Mean Squared Error</td>
+                        <td>√[(1/N) Σ |log(d_i) - log(d̂_i)|²]</td>
+                        <td>Lower</td>
+                        <td>Measures errors in logarithmic space, more sensitive to close regions.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>a1</strong></td>
+                        <td>Threshold Accuracy (δ < 1.25)</td>
+                        <td>% of max(d_i/d̂_i, d̂_i/d_i) < 1.25</td>
+                        <td>Higher</td>
+                        <td>Percentage of pixels where relative error is within 25%.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>a2</strong></td>
+                        <td>Threshold Accuracy (δ < 1.25²)</td>
+                        <td>% of max(d_i/d̂_i, d̂_i/d_i) < 1.25²</td>
+                        <td>Higher</td>
+                        <td>Percentage of pixels where relative error is within 56.25%.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>a3</strong></td>
+                        <td>Threshold Accuracy (δ < 1.25³)</td>
+                        <td>% of max(d_i/d̂_i, d̂_i/d_i) < 1.25³</td>
+                        <td>Higher</td>
+                        <td>Percentage of pixels where relative error is within 95.31%.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>where d_i is the predicted depth and d̂_i is the ground truth depth.</p>
+            
+            <h3>Stereo-Specific Metrics</h3>
+            <p>For evaluating stereo matching algorithms, we include:</p>
+            
+            <table class="metrics-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Description</th>
+                        <th>Formula</th>
+                        <th>Better</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>EPE-all</strong></td>
+                        <td>End-Point Error</td>
+                        <td>(1/N) Σ |disp_i - disp̂_i|</td>
+                        <td>Lower</td>
+                        <td>Average absolute disparity error in pixels.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>>3px Error (bad3)</strong></td>
+                        <td>Absolute Disparity Error Rate</td>
+                        <td>% of pixels where |disp_i - disp̂_i| > 3</td>
+                        <td>Lower</td>
+                        <td>Percentage of pixels whose disparity error exceeds 3 pixels.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>D1-all</strong></td>
+                        <td>Disparity Error Rate</td>
+                        <td>% where |disp_i - disp̂_i| > 3 AND > 5%</td>
+                        <td>Lower</td>
+                        <td>Standard error metric for KITTI Stereo benchmark.</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Image Synthesis Metrics</h3>
+            <p>For evaluating image reconstruction quality:</p>
+            
+            <table class="metrics-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Description</th>
+                        <th>Formula</th>
+                        <th>Better</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>PSNR</strong></td>
+                        <td>Peak Signal-to-Noise Ratio</td>
+                        <td>20·log₁₀(MAX_I/√MSE)</td>
+                        <td>Higher</td>
+                        <td>Measures ratio between maximum signal power and noise. Values above 30dB indicate good quality.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SSIM</strong></td>
+                        <td>Structural Similarity Index</td>
+                        <td>Complex formula considering luminance, contrast, structure</td>
+                        <td>Higher</td>
+                        <td>Measures perceived similarity (0-1, 1 = perfect). More aligned with human perception than PSNR.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>photo_rmse</strong></td>
+                        <td>Photometric RMSE</td>
+                        <td>√[(1/N) Σ |I_i - Î_i|²]</td>
+                        <td>Lower</td>
+                        <td>Root mean squared error between pixel values in reconstructed and ground truth images.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Visualization Section -->
+        <section id="visualization" class="section">
+            <h2>🔍 Baseline Visualization</h2>
+            
+            <div class="controls">
+                <button class="btn active" onclick="switchView('table', 'tartanair')">📊 Table View</button>
+                <button class="btn" onclick="switchView('gallery', 'tartanair')">🖼️ Gallery View</button>
+                <button class="btn" onclick="switchView('comparison', 'tartanair')">⚖️ Comparison Mode</button>
+            </div>
+            
+            <h3>TartanAir Underwater Visualization (Zero-shot)</h3>
+            
+            <!-- Table View for TartanAir -->
+            <div class="table-view" id="tartanairTableView">
+                <div class="table-container">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="sticky-column">Sample Images<br>(Left | Right)</th>
+                                <th colspan="3"><a href="https://github.com/NVlabs/FoundationStereo" class="method-link">Foundation Stereo</a></th>
+                                <th colspan="3"><a href="https://github.com/bartn8/stereoanywhere" class="method-link">StereoAnywhere</a></th>
+                                <th colspan="3"><a href="https://github.com/Windsrain/Selective-Stereo" class="method-link">Selective RAFT</a></th>
+                                <th colspan="3"><a href="https://github.com/Windsrain/Selective-Stereo" class="method-link">Selective IGEV</a></th>
+                                <th colspan="3"><a href="https://github.com/gangweix/IGEV-plusplus" class="method-link">IGEV++</a></th>
+                                <th colspan="3"><a href="https://github.com/princeton-vl/RAFT-Stereo" class="method-link">RAFT Stereo</a></th>
+                                <th colspan="3"><a href="https://github.com/ZM-Zhou/TiO-Depth_pytorch" class="method-link">TiO-Depth</a></th>
+                                <th colspan="3"><a href="https://github.com/autonomousvision/unimatch" class="method-link">UniMatch</a></th>
+                                <th colspan="3"><a href="https://github.com/haofeixu/aanet" class="method-link">AANet</a></th>
+                                <th colspan="3"><a href="https://github.com/JiaRenChang/PSMNet" class="method-link">PSMNet</a></th>
+                            </tr>
+                            <tr>
+                                <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                                <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                                <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                                <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                                <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                                <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                                <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                                <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                                <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                                <th>Training</th><th>Pred Depth</th><th>GT Depth</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Sample 001 -->
+                            <tr>
+                                <td class="sticky-column">
+                                    <span class="sample-label">Sample_001</span><br>
+                                    <img src="images/easy000_000000l.png" class="thumbnail" alt="Sample 001 - Left Image" onclick="openModal(this)">
+                                    <img src="images/easy000_000000r.png" class="thumbnail" alt="Sample 001 - Right Image" onclick="openModal(this)">
+                                </td>
+                                <td>FSD</td>
+                                <td><img src="images/foundation_stereo_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Sample 001 Prediction"></td>
+                                <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                                <td>SceneFlow</td>
+                                <td><img src="images/stereoanywhere_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Sample 001 Prediction"></td>
+                                <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                                <td>SceneFlow</td>
+                                <td><img src="images/selective_RAFT_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Sample 001 Prediction"></td>
+                                <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                                <td>SceneFlow</td>
+                                <td><img src="images/selective_IGEV_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Sample 001 Prediction"></td>
+                                <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                                <td>SceneFlow</td>
+                                <td><img src="images/IGEV_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Sample 001 Prediction"></td>
+                                <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                                <td>SceneFlow</td>
+                                <td><img src="images/raft_stereo_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Sample 001 Prediction"></td>
+                                <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                                <td>KITTI2012</td>
+                                <td><img src="images/tio_depth_tartanair_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Sample 001 Prediction"></td>
+                                <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                                <td>SceneFlow</td>
+                                <td><img src="images/unimatch_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Sample 001 Prediction"></td>
+                                <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                                <td>SceneFlow</td>
+                                <td><img src="images/aanet_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Sample 001 Prediction"></td>
+                                <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                                <td>SceneFlow</td>
+                                <td><img src="images/psmnet_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Sample 001 Prediction"></td>
+                                <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            </tr>
+                            
+                            <!-- Sample 002 -->
+                            <tr>
+                                <td class="sticky-column">
+                                    <span class="sample-label">Sample_002</span><br>
+                                    <img src="images/easy004_000000l.png" class="thumbnail" alt="Sample 002 - Left Image" onclick="openModal(this)">
+                                    <img src="images/easy004_000000r.png" class="thumbnail" alt="Sample 002 - Right Image" onclick="openModal(this)">
+                                </td>
+                                <td></td>
+                                <td><img src="images/foundation_stereo_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Sample 002 Prediction"></td>
+                                <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/stereoanywhere_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Sample 002 Prediction"></td>
+                                <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/selective_RAFT_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Sample 002 Prediction"></td>
+                                <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/selective_IGEV_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Sample 002 Prediction"></td>
+                                <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/IGEV_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Sample 002 Prediction"></td>
+                                <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/raft_stereo_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Sample 002 Prediction"></td>
+                                <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/tio_depth_tartanair_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Sample 002 Prediction"></td>
+                                <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/unimatch_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Sample 002 Prediction"></td>
+                                <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/aanet_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Sample 002 Prediction"></td>
+                                <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/psmnet_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Sample 002 Prediction"></td>
+                                <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            </tr>
+                            
+                            <!-- Sample 003 -->
+                            <tr>
+                                <td class="sticky-column">
+                                    <span class="sample-label">Sample_003</span><br>
+                                    <img src="images/easy011_000000l.png" class="thumbnail" alt="Sample 003 - Left Image" onclick="openModal(this)">
+                                    <img src="images/easy011_000000r.png" class="thumbnail" alt="Sample 003 - Right Image" onclick="openModal(this)">
+                                </td>
+                                <td></td>
+                                <td><img src="images/foundation_stereo_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Sample 003 Prediction"></td>
+                                <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/stereoanywhere_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Sample 003 Prediction"></td>
+                                <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/selective_RAFT_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Sample 003 Prediction"></td>
+                                <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/selective_IGEV_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Sample 003 Prediction"></td>
+                                <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/igev_plusplus_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Sample 003 Prediction"></td>
+                                <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/raft_stereo_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Sample 003 Prediction"></td>
+                                <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/tio_depth_tartanair_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Sample 003 Prediction"></td>
+                                <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/unimatch_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Sample 003 Prediction"></td>
+                                <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/aanet_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Sample 003 Prediction"></td>
+                                <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/psmnet_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Sample 003 Prediction"></td>
+                                <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            </tr>
+                            
+                            <!-- Sample 004 (Hard) -->
+                            <tr>
+                                <td class="sticky-column">
+                                    <span class="sample-label">Sample_004 (Hard)</span><br>
+                                    <img src="images/hard003_000000l.png" class="thumbnail" alt="Sample 004 - Left Image" onclick="openModal(this)">
+                                    <img src="images/hard003_000000r.png" class="thumbnail" alt="Sample 004 - Right Image" onclick="openModal(this)">
+                                </td>
+                                <td></td>
+                                <td><img src="images/foundation_stereo_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Sample 004 Prediction"></td>
+                                <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/stereoanywhere_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Sample 004 Prediction"></td>
+                                <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/selective_RAFT_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Sample 004 Prediction"></td>
+                                <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/selective_IGEV_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Sample 004 Prediction"></td>
+                                <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/IGEV_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Sample 004 Prediction"></td>
+                                <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/raft_stereo_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Sample 004 Prediction"></td>
+                                <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/tio_depth_tartanair_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Sample 004 Prediction"></td>
+                                <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/unimatch_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Sample 004 Prediction"></td>
+                                <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/aanet_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Sample 004 Prediction"></td>
+                                <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                                <td></td>
+                                <td><img src="images/psmnet_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Sample 004 Prediction"></td>
+                                <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Gallery View for TartanAir -->
+            <div class="gallery-view" id="tartanairGalleryView">
+                <div class="gallery-grid" id="tartanairGalleryGrid">
+                    <!-- Gallery items will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Comparison View for TartanAir -->
+            <div class="comparison-view" id="tartanairComparisonView">
+                <div class="comparison-container">
+                    <div class="comparison-selectors">
+                        <div class="selector-group">
+                            <label for="tartanairLeftMethodSelect">Left Method:</label>
+                            <select id="tartanairLeftMethodSelect" onchange="updateComparison('tartanair')">
+                                <option value="foundation_stereo">Foundation Stereo</option>
+                                <option value="stereoanywhere">StereoAnywhere</option>
+                                <option value="selective_RAFT">Selective RAFT</option>
+                                <option value="selective_IGEV">Selective IGEV</option>
+                                <option value="igev_plusplus">IGEV++</option>
+                                <option value="raft_stereo">RAFT Stereo</option>
+                                <option value="tio_depth">TiO-Depth</option>
+                                <option value="unimatch">UniMatch</option>
+                                <option value="aanet">AANet</option>
+                                <option value="psmnet">PSMNet</option>
+                                <option value="ground_truth">Ground Truth</option>
+                            </select>
+                            
+                            <label for="tartanairSampleSelect" style="margin-top: 15px;">Sample:</label>
+                            <select id="tartanairSampleSelect" onchange="updateComparison('tartanair')">
+                                <option value="000">Sample 001 (Easy)</option>
+                                <option value="004">Sample 002 (Easy)</option>
+                                <option value="011">Sample 003 (Easy)</option>
+                                <option value="003_hard">Sample 004 (Hard)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="selector-group">
+                            <label for="tartanairRightMethodSelect">Right Method:</label>
+                            <select id="tartanairRightMethodSelect" onchange="updateComparison('tartanair')">
+                                <option value="ground_truth">Ground Truth</option>
+                                <option value="foundation_stereo">Foundation Stereo</option>
+                                <option value="stereoanywhere">StereoAnywhere</option>
+                                <option value="selective_RAFT">Selective RAFT</option>
+                                <option value="selective_IGEV">Selective IGEV</option>
+                                <option value="igev_plusplus">IGEV++</option>
+                                <option value="raft_stereo">RAFT Stereo</option>
+                                <option value="tio_depth">TiO-Depth</option>
+                                <option value="unimatch">UniMatch</option>
+                                <option value="aanet">AANet</option>
+                                <option value="psmnet">PSMNet</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="image-compare-wrapper">
+                        <div class="image-compare-slider" id="tartanairCompareSlider">
+                            <img src="images/easy000_000000l_plasma.png" class="compare-image" id="tartanairBaseImage" alt="Base comparison image">
+                            <div class="compare-overlay" id="tartanairCompareOverlay">
+                                <img src="images/foundation_stereo_ocean_Easy_P000_000000_plasma.png" id="tartanairOverlayImage" alt="Overlay comparison image">
+                            </div>
+                            <div class="slider-handle" id="tartanairSliderHandle"></div>
+                            <div class="compare-labels">
+                                <span class="compare-label" id="tartanairLeftLabel">Foundation Stereo</span>
+                                <span class="compare-label" id="tartanairRightLabel">Ground Truth</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SQUID Visualization Section -->
+        <h3 style="margin-top: 50px;">SQUID Visualization (Zero-shot)</h3>
 
         <div class="controls">
-            <div class="view-mode">
-                <button class="btn active" onclick="switchView('table')">📊 Table View</button>
-                <button class="btn" onclick="switchView('gallery')">🖼️ Gallery View</button>
-                <button class="btn" onclick="switchView('comparison')">⚖️ Comparison Mode</button>
-            </div>
-            <div class="help-icon">?
-                <div class="help-tooltip">Click images to enlarge • Use arrow keys to navigate • ESC to close</div>
-            </div>
+            <button class="btn active" onclick="switchView('table', 'squid')">📊 Table View</button>
+            <button class="btn" onclick="switchView('gallery', 'squid')">🖼️ Gallery View</button>
+            <button class="btn" onclick="switchView('comparison', 'squid')">⚖️ Comparison Mode</button>
         </div>
 
-        <!-- Table View -->
-        <div class="table-view" id="tableView">
+        <!-- Table View for SQUID -->
+        <div class="table-view" id="squidTableView">
             <div class="table-container">
-                <table>
+                <table class="comparison-table">
                     <thead>
                         <tr>
                             <th rowspan="2" class="sticky-column">Sample Images<br>(Left | Right)</th>
@@ -582,180 +1366,180 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Sample 001 -->
+                        <!-- Sample 001 - Katzaa -->
                         <tr>
                             <td class="sticky-column">
-                                <span class="sample-label">Sample_001</span><br>
-                                <img src="images/easy000_000000l.png" class="thumbnail" alt="Sample 001 - Left Image" onclick="openModal(this)">
-                                <img src="images/easy000_000000r.png" class="thumbnail" alt="Sample 001 - Right Image" onclick="openModal(this)">
+                                <span class="sample-label">Sample_001 (Katzaa)</span><br>
+                                <img src="images/Katzaa_000000_image_02.png" class="thumbnail" alt="Katzaa - Left Image" onclick="openModal(this)">
+                                <img src="images/Katzaa_000000_image_03.png" class="thumbnail" alt="Katzaa - Right Image" onclick="openModal(this)">
                             </td>
                             <td>FSD</td>
-                            <td><img src="images/foundation_stereo_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Sample 001 Prediction"></td>
-                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td><img src="images/foundation_stereo_Katzaa_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Katzaa Prediction"></td>
+                            <td><img src="images/Katzaa000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Katzaa - Ground Truth"></td>
                             <td>SceneFlow</td>
-                            <td><img src="images/stereoanywhere_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Sample 001 Prediction"></td>
-                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td><img src="images/stereoanywhere_Katzaa_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Katzaa Prediction"></td>
+                            <td><img src="images/Katzaa000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Katzaa - Ground Truth"></td>
                             <td>SceneFlow</td>
-                            <td><img src="images/selective_RAFT_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Sample 001 Prediction"></td>
-                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td><img src="images/selective_RAFT_Katzaa_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Katzaa Prediction"></td>
+                            <td><img src="images/Katzaa000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Katzaa - Ground Truth"></td>
                             <td>SceneFlow</td>
-                            <td><img src="images/selective_IGEV_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Sample 001 Prediction"></td>
-                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td><img src="images/selective_IGEV_Katzaa_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Katzaa Prediction"></td>
+                            <td><img src="images/Katzaa000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Katzaa - Ground Truth"></td>
                             <td>SceneFlow</td>
-                            <td><img src="images/IGEV_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Sample 001 Prediction"></td>
-                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td><img src="images/igev_plusplus_Katzaa_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Katzaa Prediction"></td>
+                            <td><img src="images/Katzaa000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Katzaa - Ground Truth"></td>
                             <td>SceneFlow</td>
-                            <td><img src="images/raft_stereo_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Sample 001 Prediction"></td>
-                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td><img src="images/raft_stereo_Katzaa_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Katzaa Prediction"></td>
+                            <td><img src="images/Katzaa000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Katzaa - Ground Truth"></td>
                             <td>KITTI2012</td>
-                            <td><img src="images/tio_depth_tartanair_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Sample 001 Prediction"></td>
-                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td><img src="images/tio_depth_Katzaa_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Katzaa Prediction"></td>
+                            <td><img src="images/Katzaa000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Katzaa - Ground Truth"></td>
                             <td>SceneFlow</td>
-                            <td><img src="images/unimatch_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Sample 001 Prediction"></td>
-                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td><img src="images/unimatch_Katzaa_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Katzaa Prediction"></td>
+                            <td><img src="images/Katzaa000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Katzaa - Ground Truth"></td>
                             <td>SceneFlow</td>
-                            <td><img src="images/aanet_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Sample 001 Prediction"></td>
-                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td><img src="images/aanet_Katzaa_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Katzaa Prediction"></td>
+                            <td><img src="images/Katzaa000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Katzaa - Ground Truth"></td>
                             <td>SceneFlow</td>
-                            <td><img src="images/psmnet_ocean_Easy_P000_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Sample 001 Prediction"></td>
-                            <td><img src="images/easy000_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 001 - Ground Truth"></td>
+                            <td><img src="images/psmnet_Katzaa_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Katzaa Prediction"></td>
+                            <td><img src="images/Katzaa000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Katzaa - Ground Truth"></td>
                         </tr>
-
-                        <!-- Sample 002 -->
+                        
+                        <!-- Sample 002 - Michmoret -->
                         <tr>
                             <td class="sticky-column">
-                                <span class="sample-label">Sample_002</span><br>
-                                <img src="images/easy004_000000l.png" class="thumbnail" alt="Sample 002 - Left Image" onclick="openModal(this)">
-                                <img src="images/easy004_000000r.png" class="thumbnail" alt="Sample 002 - Right Image" onclick="openModal(this)">
+                                <span class="sample-label">Sample_002 (Michmoret)</span><br>
+                                <img src="images/Michmoret_000000_image_02.png" class="thumbnail" alt="Michmoret - Left Image" onclick="openModal(this)">
+                                <img src="images/Michmoret_000000_image_03.png" class="thumbnail" alt="Michmoret - Right Image" onclick="openModal(this)">
                             </td>
                             <td></td>
-                            <td><img src="images/foundation_stereo_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Sample 002 Prediction"></td>
-                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td><img src="images/foundation_stereo_Michmoret_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Michmoret Prediction"></td>
+                            <td><img src="images/Michmoret000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Michmoret - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/stereoanywhere_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Sample 002 Prediction"></td>
-                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td><img src="images/stereoanywhere_Michmoret_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Michmoret Prediction"></td>
+                            <td><img src="images/Michmoret000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Michmoret - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/selective_RAFT_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Sample 002 Prediction"></td>
-                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td><img src="images/selective_RAFT_Michmoret_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Michmoret Prediction"></td>
+                            <td><img src="images/Michmoret000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Michmoret - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/selective_IGEV_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Sample 002 Prediction"></td>
-                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td><img src="images/selective_IGEV_Michmoret_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Michmoret Prediction"></td>
+                            <td><img src="images/Michmoret000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Michmoret - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/IGEV_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Sample 002 Prediction"></td>
-                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td><img src="images/igev_plusplus_Michmoret_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Michmoret Prediction"></td>
+                            <td><img src="images/Michmoret000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Michmoret - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/raft_stereo_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Sample 002 Prediction"></td>
-                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td><img src="images/raft_stereo_Michmoret_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Michmoret Prediction"></td>
+                            <td><img src="images/Michmoret000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Michmoret - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/tio_depth_tartanair_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Sample 002 Prediction"></td>
-                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td><img src="images/tio_depth_Michmoret_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Michmoret Prediction"></td>
+                            <td><img src="images/Michmoret000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Michmoret - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/unimatch_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Sample 002 Prediction"></td>
-                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td><img src="images/unimatch_Michmoret_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Michmoret Prediction"></td>
+                            <td><img src="images/Michmoret000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Michmoret - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/aanet_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Sample 002 Prediction"></td>
-                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td><img src="images/aanet_Michmoret_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Michmoret Prediction"></td>
+                            <td><img src="images/Michmoret000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Michmoret - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/psmnet_ocean_Easy_P004_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Sample 002 Prediction"></td>
-                            <td><img src="images/easy004_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 002 - Ground Truth"></td>
+                            <td><img src="images/psmnet_Michmoret_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Michmoret Prediction"></td>
+                            <td><img src="images/Michmoret000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Michmoret - Ground Truth"></td>
                         </tr>
-
-                        <!-- Sample 003 -->
+                        
+                        <!-- Sample 003 - Nachsholim -->
                         <tr>
                             <td class="sticky-column">
-                                <span class="sample-label">Sample_003</span><br>
-                                <img src="images/easy011_000000l.png" class="thumbnail" alt="Sample 003 - Left Image" onclick="openModal(this)">
-                                <img src="images/easy011_000000r.png" class="thumbnail" alt="Sample 003 - Right Image" onclick="openModal(this)">
+                                <span class="sample-label">Sample_003 (Nachsholim)</span><br>
+                                <img src="images/Nachsholim_000000_image_02.png" class="thumbnail" alt="Nachsholim - Left Image" onclick="openModal(this)">
+                                <img src="images/Nachsholim_000000_image_03.png" class="thumbnail" alt="Nachsholim - Right Image" onclick="openModal(this)">
                             </td>
                             <td></td>
-                            <td><img src="images/foundation_stereo_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Sample 003 Prediction"></td>
-                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td><img src="images/foundation_stereo_Nachsholim_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Nachsholim Prediction"></td>
+                            <td><img src="images/Nachsholim000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Nachsholim - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/stereoanywhere_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Sample 003 Prediction"></td>
-                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td><img src="images/stereoanywhere_Nachsholim_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Nachsholim Prediction"></td>
+                            <td><img src="images/Nachsholim000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Nachsholim - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/selective_RAFT_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Sample 003 Prediction"></td>
-                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td><img src="images/selective_RAFT_Nachsholim_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Nachsholim Prediction"></td>
+                            <td><img src="images/Nachsholim000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Nachsholim - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/selective_IGEV_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Sample 003 Prediction"></td>
-                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td><img src="images/selective_IGEV_Nachsholim_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Nachsholim Prediction"></td>
+                            <td><img src="images/Nachsholim000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Nachsholim - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/igev_plusplus_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Sample 003 Prediction"></td>
-                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td><img src="images/igev_plusplus_Nachsholim_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Nachsholim Prediction"></td>
+                            <td><img src="images/Nachsholim000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Nachsholim - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/raft_stereo_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Sample 003 Prediction"></td>
-                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td><img src="images/raft_stereo_Nachsholim_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Nachsholim Prediction"></td>
+                            <td><img src="images/Nachsholim000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Nachsholim - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/tio_depth_tartanair_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Sample 003 Prediction"></td>
-                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td><img src="images/tio_depth_Nachsholim_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Nachsholim Prediction"></td>
+                            <td><img src="images/Nachsholim000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Nachsholim - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/unimatch_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Sample 003 Prediction"></td>
-                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td><img src="images/unimatch_Nachsholim_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Nachsholim Prediction"></td>
+                            <td><img src="images/Nachsholim000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Nachsholim - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/aanet_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Sample 003 Prediction"></td>
-                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td><img src="images/aanet_Nachsholim_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Nachsholim Prediction"></td>
+                            <td><img src="images/Nachsholim000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Nachsholim - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/psmnet_ocean_Easy_P011_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Sample 003 Prediction"></td>
-                            <td><img src="images/easy011_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 003 - Ground Truth"></td>
+                            <td><img src="images/psmnet_Nachsholim_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Nachsholim Prediction"></td>
+                            <td><img src="images/Nachsholim000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Nachsholim - Ground Truth"></td>
                         </tr>
-
-                        <!-- Sample 004 (Hard) -->
+                        
+                        <!-- Sample 004 - Satil -->
                         <tr>
                             <td class="sticky-column">
-                                <span class="sample-label">Sample_004 (Hard)</span><br>
-                                <img src="images/hard003_000000l.png" class="thumbnail" alt="Sample 004 - Left Image" onclick="openModal(this)">
-                                <img src="images/hard003_000000r.png" class="thumbnail" alt="Sample 004 - Right Image" onclick="openModal(this)">
+                                <span class="sample-label">Sample_004 (Satil)</span><br>
+                                <img src="images/Satil_000000_image_02.png" class="thumbnail" alt="Satil - Left Image" onclick="openModal(this)">
+                                <img src="images/Satil_000000_image_03.png" class="thumbnail" alt="Satil - Right Image" onclick="openModal(this)">
                             </td>
                             <td></td>
-                            <td><img src="images/foundation_stereo_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Sample 004 Prediction"></td>
-                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td><img src="images/foundation_stereo_Satil_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Foundation Stereo - Satil Prediction"></td>
+                            <td><img src="images/Satil000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Satil - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/stereoanywhere_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Sample 004 Prediction"></td>
-                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td><img src="images/stereoanywhere_Satil_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="StereoAnywhere - Satil Prediction"></td>
+                            <td><img src="images/Satil000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Satil - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/selective_RAFT_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Sample 004 Prediction"></td>
-                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td><img src="images/selective_RAFT_Satil_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective RAFT - Satil Prediction"></td>
+                            <td><img src="images/Satil000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Satil - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/selective_IGEV_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Sample 004 Prediction"></td>
-                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td><img src="images/selective_IGEV_Satil_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Selective IGEV - Satil Prediction"></td>
+                            <td><img src="images/Satil000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Satil - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/IGEV_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Sample 004 Prediction"></td>
-                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td><img src="images/igev_plusplus_Satil_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="IGEV++ - Satil Prediction"></td>
+                            <td><img src="images/Satil000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Satil - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/raft_stereo_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Sample 004 Prediction"></td>
-                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td><img src="images/raft_stereo_Satil_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="RAFT Stereo - Satil Prediction"></td>
+                            <td><img src="images/Satil000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Satil - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/tio_depth_tartanair_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Sample 004 Prediction"></td>
-                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td><img src="images/tio_depth_Satil_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="TiO-Depth - Satil Prediction"></td>
+                            <td><img src="images/Satil000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Satil - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/unimatch_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Sample 004 Prediction"></td>
-                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td><img src="images/unimatch_Satil_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="UniMatch - Satil Prediction"></td>
+                            <td><img src="images/Satil000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Satil - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/aanet_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Sample 004 Prediction"></td>
-                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td><img src="images/aanet_Satil_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="AANet - Satil Prediction"></td>
+                            <td><img src="images/Satil000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Satil - Ground Truth"></td>
                             <td></td>
-                            <td><img src="images/psmnet_ocean_Hard_P003_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Sample 004 Prediction"></td>
-                            <td><img src="images/hard003_000000l_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Sample 004 - Ground Truth"></td>
+                            <td><img src="images/psmnet_Satil_000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="PSMNet - Satil Prediction"></td>
+                            <td><img src="images/Satil000000_plasma.png" class="thumbnail" onclick="openModal(this)" alt="Satil - Ground Truth"></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Gallery View -->
-        <div class="gallery-view" id="galleryView">
-            <div class="gallery-grid" id="galleryGrid">
+        <!-- Gallery View for SQUID -->
+        <div class="gallery-view" id="squidGalleryView">
+            <div class="gallery-grid" id="squidGalleryGrid">
                 <!-- Gallery items will be populated by JavaScript -->
             </div>
         </div>
 
-        <!-- Comparison View -->
-        <div class="comparison-view" id="comparisonView">
+        <!-- Comparison View for SQUID -->
+        <div class="comparison-view" id="squidComparisonView">
             <div class="comparison-container">
                 <div class="comparison-selectors">
                     <div class="selector-group">
-                        <label for="leftMethodSelect">Left Method:</label>
-                        <select id="leftMethodSelect" onchange="updateComparison()">
+                        <label for="squidLeftMethodSelect">Left Method:</label>
+                        <select id="squidLeftMethodSelect" onchange="updateComparison('squid')">
                             <option value="foundation_stereo">Foundation Stereo</option>
                             <option value="stereoanywhere">StereoAnywhere</option>
                             <option value="selective_RAFT">Selective RAFT</option>
@@ -769,18 +1553,18 @@
                             <option value="ground_truth">Ground Truth</option>
                         </select>
                         
-                        <label for="sampleSelect" style="margin-top: 15px;">Sample:</label>
-                        <select id="sampleSelect" onchange="updateComparison()">
-                            <option value="001">Sample 001 (Easy)</option>
-                            <option value="004">Sample 002 (Easy)</option>
-                            <option value="011">Sample 003 (Easy)</option>
-                            <option value="003_hard">Sample 004 (Hard)</option>
+                        <label for="squidSampleSelect" style="margin-top: 15px;">Sample:</label>
+                        <select id="squidSampleSelect" onchange="updateComparison('squid')">
+                            <option value="Katzaa">Katzaa</option>
+                            <option value="Michmoret">Michmoret</option>
+                            <option value="Nachsholim">Nachsholim</option>
+                            <option value="Satil">Satil</option>
                         </select>
                     </div>
                     
                     <div class="selector-group">
-                        <label for="rightMethodSelect">Right Method:</label>
-                        <select id="rightMethodSelect" onchange="updateComparison()">
+                        <label for="squidRightMethodSelect">Right Method:</label>
+                        <select id="squidRightMethodSelect" onchange="updateComparison('squid')">
                             <option value="ground_truth">Ground Truth</option>
                             <option value="foundation_stereo">Foundation Stereo</option>
                             <option value="stereoanywhere">StereoAnywhere</option>
@@ -797,20 +1581,306 @@
                 </div>
 
                 <div class="image-compare-wrapper">
-                    <div class="image-compare-slider" id="compareSlider">
-                        <img src="images/foundation_stereo_ocean_Easy_P000_000000_plasma.png" class="compare-image" id="baseImage" alt="Base comparison image">
-                        <div class="compare-overlay" id="compareOverlay">
-                            <img src="images/easy000_000000l_plasma.png" id="overlayImage" alt="Overlay comparison image">
+                    <div class="image-compare-slider" id="squidCompareSlider">
+                        <img src="images/Katzaa000000l_plasma.png" class="compare-image" id="squidBaseImage" alt="Base comparison image">
+                        <div class="compare-overlay" id="squidCompareOverlay">
+                            <img src="images/foundation_stereo_Katzaa_000000_plasma.png" id="squidOverlayImage" alt="Overlay comparison image">
                         </div>
-                        <div class="slider-handle" id="sliderHandle"></div>
+                        <div class="slider-handle" id="squidSliderHandle"></div>
                         <div class="compare-labels">
-                            <span class="compare-label" id="leftLabel">Foundation Stereo</span>
-                            <span class="compare-label" id="rightLabel">Ground Truth</span>
+                            <span class="compare-label" id="squidLeftLabel">Foundation Stereo</span>
+                            <span class="compare-label" id="squidRightLabel">Ground Truth</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        </section>
+        
+        <!-- Results Section -->
+        <section id="results" class="section">
+            <h2>📈 Evaluation Results</h2>
+            
+            <h3>TartanAir Evaluation (10 Methods) — Depth truncated at 50m</h3>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>rel_err</th>
+                        <th>sq_rel_err</th>
+                        <th>rmse</th>
+                        <th>log_rmse</th>
+                        <th>a1</th>
+                        <th>a2</th>
+                        <th>a3</th>
+                        <th>epe</th>
+                        <th>bad3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Foundation Stereo</strong></td>
+                        <td>0.0510</td>
+                        <td>0.6126</td>
+                        <td>3.2469</td>
+                        <td>1.1777</td>
+                        <td>0.8597</td>
+                        <td>0.8732</td>
+                        <td>0.8818</td>
+                        <td>0.3702</td>
+                        <td>0.0140</td>
+                    </tr>
+                    <tr>
+                        <td><strong>stereoanywhere</strong></td>
+                        <td>0.0654</td>
+                        <td>0.5700</td>
+                        <td>3.5224</td>
+                        <td>1.2592</td>
+                        <td>0.8291</td>
+                        <td>0.8639</td>
+                        <td>0.8659</td>
+                        <td>0.5239</td>
+                        <td>0.0175</td>
+                    </tr>
+                    <tr>
+                        <td><strong>raft_stereo</strong></td>
+                        <td>0.0901</td>
+                        <td>0.8176</td>
+                        <td>4.5086</td>
+                        <td>1.5060</td>
+                        <td>0.8127</td>
+                        <td>0.8638</td>
+                        <td>0.8673</td>
+                        <td>0.6020</td>
+                        <td>0.0232</td>
+                    </tr>
+                    <tr>
+                        <td><strong>psmnet</strong></td>
+                        <td>0.0984</td>
+                        <td>0.9695</td>
+                        <td>4.4251</td>
+                        <td>1.4873</td>
+                        <td>0.8013</td>
+                        <td>0.8485</td>
+                        <td>0.8799</td>
+                        <td>0.7235</td>
+                        <td>0.0297</td>
+                    </tr>
+                    <tr>
+                        <td><strong>selective_RAFT</strong></td>
+                        <td>0.1057</td>
+                        <td>0.9950</td>
+                        <td>4.9086</td>
+                        <td>1.5910</td>
+                        <td>0.7850</td>
+                        <td>0.8455</td>
+                        <td>0.8753</td>
+                        <td>0.7202</td>
+                        <td>0.0298</td>
+                    </tr>
+                    <tr>
+                        <td><strong>IGEV</strong></td>
+                        <td>0.1211</td>
+                        <td>1.8382</td>
+                        <td>5.2505</td>
+                        <td>1.6583</td>
+                        <td>0.7965</td>
+                        <td>0.8546</td>
+                        <td>0.8583</td>
+                        <td>0.6573</td>
+                        <td>0.0286</td>
+                    </tr>
+                    <tr>
+                        <td><strong>selective_IGEV</strong></td>
+                        <td>0.1367</td>
+                        <td>1.6968</td>
+                        <td>5.4126</td>
+                        <td>1.6887</td>
+                        <td>0.7549</td>
+                        <td>0.8323</td>
+                        <td>0.8570</td>
+                        <td>0.8178</td>
+                        <td>0.0402</td>
+                    </tr>
+                    <tr>
+                        <td><strong>unimatch</strong></td>
+                        <td>0.1750</td>
+                        <td>2.4625</td>
+                        <td>6.5423</td>
+                        <td>1.8783</td>
+                        <td>0.7438</td>
+                        <td>0.8140</td>
+                        <td>0.8457</td>
+                        <td>0.9482</td>
+                        <td>0.0449</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AAnet</strong></td>
+                        <td>0.6857</td>
+                        <td>9.3040</td>
+                        <td>14.6230</td>
+                        <td>2.6826</td>
+                        <td>0.2604</td>
+                        <td>0.3038</td>
+                        <td>0.3338</td>
+                        <td>54.9967</td>
+                        <td>0.7595</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TiO-depth</strong></td>
+                        <td>0.7969</td>
+                        <td>9.5611</td>
+                        <td>15.0699</td>
+                        <td>2.7127</td>
+                        <td>0.0046</td>
+                        <td>0.0085</td>
+                        <td>0.0487</td>
+                        <td>37.8464</td>
+                        <td>1.1227</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>SQUID Evaluation (10 Methods) -- Depth truncated at 50m</h3>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>rel_err</th>
+                        <th>sq_rel_err</th>
+                        <th>rmse</th>
+                        <th>log_rmse</th>
+                        <th>a1</th>
+                        <th>a2</th>
+                        <th>a3</th>
+                        <th>epe</th>
+                        <th>bad3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>foundation_stereo</strong></td>
+                        <td>0.0838</td>
+                        <td>0.6381</td>
+                        <td>2.1736</td>
+                        <td>0.7764</td>
+                        <td>0.9294</td>
+                        <td>0.9698</td>
+                        <td>0.8731</td>
+                        <td>11.5613</td>
+                        <td>0.5761</td>
+                    </tr>
+                    <tr>
+                        <td><strong>raft_stereo</strong></td>
+                        <td>0.0915</td>
+                        <td>0.7795</td>
+                        <td>2.1647</td>
+                        <td>0.7723</td>
+                        <td>0.9235</td>
+                        <td>0.9634</td>
+                        <td>0.8641</td>
+                        <td>11.6019</td>
+                        <td>0.6068</td>
+                    </tr>
+                    <tr>
+                        <td><strong>igev_plusplus</strong></td>
+                        <td>0.1044</td>
+                        <td>1.6478</td>
+                        <td>2.7535</td>
+                        <td>1.0129</td>
+                        <td>0.9346</td>
+                        <td>0.9712</td>
+                        <td>0.8773</td>
+                        <td>11.4860</td>
+                        <td>0.6408</td>
+                    </tr>
+                    <tr>
+                        <td><strong>selective_igev</strong></td>
+                        <td>0.1061</td>
+                        <td>1.0188</td>
+                        <td>2.1200</td>
+                        <td>0.7514</td>
+                        <td>0.9171</td>
+                        <td>0.9555</td>
+                        <td>0.8557</td>
+                        <td>20.4114</td>
+                        <td>0.6153</td>
+                    </tr>
+                    <tr>
+                        <td><strong>stereoanywhere</strong></td>
+                        <td>0.1065</td>
+                        <td>1.2326</td>
+                        <td>2.7146</td>
+                        <td>0.9986</td>
+                        <td>0.9179</td>
+                        <td>0.9605</td>
+                        <td>0.8714</td>
+                        <td>10.6866</td>
+                        <td>0.5897</td>
+                    </tr>
+                    <tr>
+                        <td><strong>selective_raft</strong></td>
+                        <td>0.1285</td>
+                        <td>0.4537</td>
+                        <td>1.9704</td>
+                        <td>0.6782</td>
+                        <td>0.8558</td>
+                        <td>0.9300</td>
+                        <td>0.8641</td>
+                        <td>29.8263</td>
+                        <td>0.6744</td>
+                    </tr>
+                    <tr>
+                        <td><strong>psmnet</strong></td>
+                        <td>0.5804</td>
+                        <td>7.9420</td>
+                        <td>5.5248</td>
+                        <td>1.7092</td>
+                        <td>0.7139</td>
+                        <td>0.7909</td>
+                        <td>0.7315</td>
+                        <td>79.7753</td>
+                        <td>0.7895</td>
+                    </tr>
+                    <tr>
+                        <td><strong>tio_depth</strong></td>
+                        <td>1.4735</td>
+                        <td>12.9600</td>
+                        <td>7.8809</td>
+                        <td>2.0644</td>
+                        <td>0.1753</td>
+                        <td>0.3346</td>
+                        <td>0.4584</td>
+                        <td>138.5537</td>
+                        <td>0.9999</td>
+                    </tr>
+                    <tr>
+                        <td><strong>unimatch</strong></td>
+                        <td>3.7029</td>
+                        <td>154.8734</td>
+                        <td>20.6817</td>
+                        <td>3.0292</td>
+                        <td>0.5300</td>
+                        <td>0.6076</td>
+                        <td>0.5916</td>
+                        <td>98.4388</td>
+                        <td>0.9501</td>
+                    </tr>
+                    <tr>
+                        <td><strong>aanet</strong></td>
+                        <td>8.2848</td>
+                        <td>350.2032</td>
+                        <td>38.3624</td>
+                        <td>3.6471</td>
+                        <td>0.0602</td>
+                        <td>0.1087</td>
+                        <td>0.1391</td>
+                        <td>193.6751</td>
+                        <td>0.9999</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
     </div>
 
     <!-- Modal for enlarged images -->
@@ -827,71 +1897,92 @@
         let currentImages = [];
         let currentIndex = 0;
         let isSliderActive = false;
+        let currentDataset = 'tartanair';
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             currentImages = Array.from(document.querySelectorAll('.thumbnail'));
-            switchView('table');
-            initializeComparison();
-            populateGallery();
+            initializeComparison('tartanair');
+            initializeComparison('squid');
+            populateGallery('tartanair');
+            populateGallery('squid');
+            updateComparison('tartanair');
+            updateComparison('squid');
         });
 
         // View switching
-        function switchView(view) {
-            // Hide all views
-            document.getElementById('tableView').style.display = 'none';
-            document.getElementById('galleryView').style.display = 'none';
-            document.getElementById('comparisonView').style.display = 'none';
+        function switchView(view, dataset = 'tartanair') {
+            currentDataset = dataset;
+            
+            // Hide all views for this dataset
+            document.getElementById(dataset + 'TableView').style.display = 'none';
+            document.getElementById(dataset + 'GalleryView').style.display = 'none';
+            document.getElementById(dataset + 'ComparisonView').style.display = 'none';
             
             // Remove active class from all buttons
-            document.querySelectorAll('.btn').forEach(btn => btn.classList.remove('active'));
+            const controls = event.target.parentElement;
+            controls.querySelectorAll('.btn').forEach(btn => btn.classList.remove('active'));
             
             // Show selected view and activate button
             if (view === 'table') {
-                document.getElementById('tableView').style.display = 'block';
-                document.querySelectorAll('.btn')[0].classList.add('active');
+                document.getElementById(dataset + 'TableView').style.display = 'block';
+                event.target.classList.add('active');
             } else if (view === 'gallery') {
-                document.getElementById('galleryView').style.display = 'block';
-                document.querySelectorAll('.btn')[1].classList.add('active');
+                document.getElementById(dataset + 'GalleryView').style.display = 'block';
+                event.target.classList.add('active');
             } else if (view === 'comparison') {
-                document.getElementById('comparisonView').style.display = 'block';
-                document.querySelectorAll('.btn')[2].classList.add('active');
-                updateComparison();
+                document.getElementById(dataset + 'ComparisonView').style.display = 'block';
+                event.target.classList.add('active');
+                setTimeout(() => updateComparison(dataset), 100);
             }
         }
 
         // Populate gallery view
-        function populateGallery() {
-            const galleryGrid = document.getElementById('galleryGrid');
+        function populateGallery(dataset) {
+            const galleryGrid = document.getElementById(dataset + 'GalleryGrid');
             const methods = [
                 {name: 'Foundation Stereo', prefix: 'foundation_stereo'},
                 {name: 'StereoAnywhere', prefix: 'stereoanywhere'},
                 {name: 'Selective RAFT', prefix: 'selective_RAFT'},
                 {name: 'Selective IGEV', prefix: 'selective_IGEV'},
-                {name: 'IGEV++', prefix: 'IGEV', special: '011'},
+                {name: 'IGEV++', prefix: dataset === 'tartanair' ? 'IGEV' : 'igev_plusplus'},
                 {name: 'RAFT Stereo', prefix: 'raft_stereo'},
-                {name: 'TiO-Depth', prefix: 'tio_depth_tartanair'},
+                {name: 'TiO-Depth', prefix: dataset === 'tartanair' ? 'tio_depth_tartanair' : 'tio_depth'},
                 {name: 'UniMatch', prefix: 'unimatch'},
                 {name: 'AANet', prefix: 'aanet'},
                 {name: 'PSMNet', prefix: 'psmnet'}
             ];
             
-            const samples = [
-                {id: '000', label: 'Sample 001', type: 'Easy'},
-                {id: '004', label: 'Sample 002', type: 'Easy'},
-                {id: '011', label: 'Sample 003', type: 'Easy'},
-                {id: '003', label: 'Sample 004', type: 'Hard'}
-            ];
+            let samples;
+            if (dataset === 'tartanair') {
+                samples = [
+                    {id: '000', label: 'Sample 001', type: 'Easy'},
+                    {id: '004', label: 'Sample 002', type: 'Easy'},
+                    {id: '011', label: 'Sample 003', type: 'Easy'},
+                    {id: '003', label: 'Sample 004', type: 'Hard'}
+                ];
+            } else {
+                samples = [
+                    {id: '000000', label: 'Katzaa', prefix: 'Katzaa'},
+                    {id: '000000', label: 'Michmoret', prefix: 'Michmoret'},
+                    {id: '000000', label: 'Nachsholim', prefix: 'Nachsholim'},
+                    {id: '000000', label: 'Satil', prefix: 'Satil'}
+                ];
+            }
             
             let galleryHTML = '';
             
             methods.forEach(method => {
                 samples.forEach(sample => {
                     let imagePath;
-                    if (method.prefix === 'IGEV' && sample.id === '011') {
-                        imagePath = `images/igev_plusplus_ocean_${sample.type}_P${sample.id}_000000_plasma.png`;
+                    if (dataset === 'tartanair') {
+                        if (method.prefix === 'IGEV' && sample.id === '011') {
+                            imagePath = `images/igev_plusplus_ocean_${sample.type}_P${sample.id}_000000_plasma.png`;
+                        } else {
+                            imagePath = `images/${method.prefix}_ocean_${sample.type}_P${sample.id}_000000_plasma.png`;
+                        }
                     } else {
-                        imagePath = `images/${method.prefix}_ocean_${sample.type}_P${sample.id}_000000_plasma.png`;
+                        imagePath = `images/${method.prefix}_${sample.prefix}_${sample.id}_plasma.png`;
                     }
                     
                     galleryHTML += `
@@ -917,10 +2008,11 @@
             caption.innerHTML = img.alt || img.src.split('/').pop();
             
             // Update current images list based on current view
-            if (document.getElementById('galleryView').style.display === 'block') {
-                currentImages = Array.from(document.querySelectorAll('.gallery-item img'));
+            const galleryView = img.closest('.gallery-view');
+            if (galleryView) {
+                currentImages = Array.from(galleryView.querySelectorAll('img'));
             } else {
-                currentImages = Array.from(document.querySelectorAll('.thumbnail'));
+                currentImages = Array.from(document.querySelectorAll('.thumbnail, .dataset-table img'));
             }
             
             currentIndex = currentImages.indexOf(img);
@@ -965,10 +2057,10 @@
         });
 
         // Comparison view functions
-        function initializeComparison() {
-            const slider = document.getElementById('compareSlider');
-            const overlay = document.getElementById('compareOverlay');
-            const handle = document.getElementById('sliderHandle');
+        function initializeComparison(dataset) {
+            const slider = document.getElementById(dataset + 'CompareSlider');
+            const overlay = document.getElementById(dataset + 'CompareOverlay');
+            const handle = document.getElementById(dataset + 'SliderHandle');
             
             if (!slider || !overlay || !handle) return;
             
@@ -1011,63 +2103,85 @@
             }
         }
 
-        function updateComparison() {
-            const leftMethod = document.getElementById('leftMethodSelect').value;
-            const rightMethod = document.getElementById('rightMethodSelect').value;
-            const sample = document.getElementById('sampleSelect').value;
+        function updateComparison(dataset) {
+            const leftMethod = document.getElementById(dataset + 'LeftMethodSelect')?.value || 'foundation_stereo';
+            const rightMethod = document.getElementById(dataset + 'RightMethodSelect')?.value || 'ground_truth';
+            const sample = document.getElementById(dataset + 'SampleSelect')?.value || '000';
             
-            let sampleNum, sampleType;
-            if (sample === '003_hard') {
-                sampleNum = '003';
-                sampleType = 'Hard';
+            const baseImage = document.getElementById(dataset + 'BaseImage');
+            const overlayImage = document.getElementById(dataset + 'OverlayImage');
+            
+            if (!baseImage || !overlayImage) return;
+            
+            let rightPath, leftPath;
+            if (dataset === 'tartanair') {
+                rightPath = getImagePath(rightMethod, sample, 'tartanair');
+                leftPath = getImagePath(leftMethod, sample, 'tartanair');
             } else {
-                sampleNum = sample;
-                sampleType = 'Easy';
+                rightPath = getImagePath(rightMethod, sample, 'squid');
+                leftPath = getImagePath(leftMethod, sample, 'squid');
             }
             
-            // Update images
-            const baseImage = document.getElementById('baseImage');
-            const overlayImage = document.getElementById('overlayImage');
-            
-            baseImage.src = getImagePath(rightMethod, sampleNum, sampleType);
-            overlayImage.src = getImagePath(leftMethod, sampleNum, sampleType);
+            baseImage.src = rightPath;
+            overlayImage.src = leftPath;
             
             // Update labels
-            document.getElementById('leftLabel').textContent = getMethodName(leftMethod);
-            document.getElementById('rightLabel').textContent = getMethodName(rightMethod);
+            const leftLabel = document.getElementById(dataset + 'LeftLabel');
+            const rightLabel = document.getElementById(dataset + 'RightLabel');
+            if (leftLabel) leftLabel.textContent = getMethodName(leftMethod);
+            if (rightLabel) rightLabel.textContent = getMethodName(rightMethod);
             
             // Reset slider to middle
-            document.getElementById('compareOverlay').style.width = '50%';
-            document.getElementById('sliderHandle').style.left = '50%';
+            const overlay = document.getElementById(dataset + 'CompareOverlay');
+            const handle = document.getElementById(dataset + 'SliderHandle');
+            if (overlay) overlay.style.width = '50%';
+            if (handle) handle.style.left = '50%';
         }
 
-        function getImagePath(method, sampleNum, sampleType) {
-            if (method === 'ground_truth') {
-                if (sampleType === 'Hard') {
-                    return `images/hard${sampleNum}_000000l_plasma.png`;
+        function getImagePath(method, sample, dataset) {
+            if (dataset === 'tartanair') {
+                let sampleNum, sampleType;
+                if (sample === '003_hard') {
+                    sampleNum = '003';
+                    sampleType = 'Hard';
                 } else {
-                    return `images/easy${sampleNum}_000000l_plasma.png`;
+                    sampleNum = String(sample).padStart(3, '0');
+                    sampleType = 'Easy';
                 }
-            }
-            
-            let prefix = method;
-            if (method === 'igev_plusplus') {
-                if (sampleNum === '011') {
+                
+                if (method === 'ground_truth') {
+                    if (sampleType === 'Hard') {
+                        return `images/hard${sampleNum}_000000l_plasma.png`;
+                    } else {
+                        return `images/easy${sampleNum}_000000l_plasma.png`;
+                    }
+                }
+                
+                // Handle different methods
+                let prefix = method;
+                if (method === 'tio_depth') {
+                    prefix = 'tio_depth_tartanair';
+                } else if (method === 'igev_plusplus' && sampleNum === '011' && sampleType === 'Easy') {
                     return `images/igev_plusplus_ocean_${sampleType}_P${sampleNum}_000000_plasma.png`;
-                } else {
-                    return `images/IGEV_ocean_${sampleType}_P${sampleNum}_000000_plasma.png`;
+                } else if (method === 'igev_plusplus') {
+                    prefix = 'IGEV';
                 }
-            } else if (method === 'tio_depth') {
-                prefix = 'tio_depth_tartanair';
-            } else if (method === 'selective_RAFT' || method === 'selective_IGEV') {
-                // Keep as is
-            } else if (method === 'IGEV') {
-                if (sampleNum === '011') {
-                    return `images/igev_plusplus_ocean_${sampleType}_P${sampleNum}_000000_plasma.png`;
+                
+                return `images/${prefix}_ocean_${sampleType}_P${sampleNum}_000000_plasma.png`;
+            } else if (dataset === 'squid') {
+                // SQUID dataset paths
+                if (method === 'ground_truth') {
+                    // Ground truth has different naming pattern
+                    if (sample === 'Michmoret') {
+                        return `images/${sample}000000_plasma.png`;
+                    } else {
+                        return `images/${sample}000000l_plasma.png`;
+                    }
                 }
+                
+                // For all other methods
+                return `images/${method}_${sample}_000000_plasma.png`;
             }
-            
-            return `images/${prefix}_ocean_${sampleType}_P${sampleNum}_000000_plasma.png`;
         }
 
         function getMethodName(method) {
@@ -1085,40 +2199,6 @@
                 'ground_truth': 'Ground Truth'
             };
             return names[method] || method;
-        }
-
-        // Add smooth scrolling for table view
-        const tableContainer = document.querySelector('.table-container');
-        if (tableContainer) {
-            let isScrolling = false;
-            let startX, scrollLeft;
-            
-            tableContainer.addEventListener('mousedown', (e) => {
-                if (e.target.tagName !== 'IMG') {
-                    isScrolling = true;
-                    startX = e.pageX - tableContainer.offsetLeft;
-                    scrollLeft = tableContainer.scrollLeft;
-                    tableContainer.style.cursor = 'grabbing';
-                }
-            });
-            
-            tableContainer.addEventListener('mouseleave', () => {
-                isScrolling = false;
-                tableContainer.style.cursor = 'grab';
-            });
-            
-            tableContainer.addEventListener('mouseup', () => {
-                isScrolling = false;
-                tableContainer.style.cursor = 'grab';
-            });
-            
-            tableContainer.addEventListener('mousemove', (e) => {
-                if (!isScrolling) return;
-                e.preventDefault();
-                const x = e.pageX - tableContainer.offsetLeft;
-                const walk = (x - startX) * 2;
-                tableContainer.scrollLeft = scrollLeft - walk;
-            });
         }
     </script>
 </body>
