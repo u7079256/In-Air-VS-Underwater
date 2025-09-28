@@ -274,6 +274,34 @@
                 closeModal();
             }
         });
+
+
+                function initImageCompare() {
+            const sliders = document.querySelectorAll('.image-compare-slider');
+            
+            sliders.forEach(slider => {
+                let isDown = false;
+                const overlay = slider.querySelector('.compare-overlay');
+                const handle = slider.querySelector('.slider-handle');
+                
+                slider.addEventListener('mousedown', () => isDown = true);
+                slider.addEventListener('mouseup', () => isDown = false);
+                slider.addEventListener('mouseleave', () => isDown = false);
+                
+                slider.addEventListener('mousemove', (e) => {
+                    if (!isDown) return;
+                    
+                    const x = e.offsetX;
+                    const width = slider.offsetWidth;
+                    const percentage = (x / width) * 100;
+                    
+                    overlay.style.width = percentage + '%';
+                    handle.style.left = percentage + '%';
+                });
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', initImageCompare);
     </script>
 </body>
 </html>
